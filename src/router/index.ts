@@ -14,18 +14,18 @@ const router = createRouter({
             component: () => import('../views/DatabaseManagerView.vue')
         },
         {
-            path: "/database",
-            name: "database",
+            path: "/database-viewer",
+            name: "database-viewer",
             component: () => import('../views/DatabaseViewerView.vue')
         },
         {
-            path: "/builder",
-            name: "builder",
+            path: "/query-builder",
+            name: "query-builder",
             component: () => import('../views/QueryBuilderView.vue')
         },
         {
-            path: "/templates",
-            name: "templates",
+            path: "/template",
+            name: "template",
             component: () => import('../views/TemplateManagerView.vue')
         },
         {

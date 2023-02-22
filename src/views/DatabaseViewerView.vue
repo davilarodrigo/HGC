@@ -1,10 +1,10 @@
 
 <script setup lang="ts">
-import DatabaseSelector from '../components/DatabaseSelector.vue'
+
 </script>
 
 <template>
-  <DatabaseSelector/>
+
   <button class="refresh-table-button   btn btn-outline-success"><i class="fas fa-sync"></i> Refresh
     Table</button>
   <table id="main-table" class="table table-striped table-bordered table-hover mt-2">

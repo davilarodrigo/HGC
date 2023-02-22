@@ -1,10 +1,8 @@
 
 <script setup lang="ts">
-import DatabaseSelector from '../components/DatabaseSelector.vue'
 </script>
 <template>
-<DatabaseSelector></DatabaseSelector>
-    
+
         <div id="sentence-editor-div" class="container">
             <div class="row">
                 <div class="col-lg-2 col-md-3 my-2">
