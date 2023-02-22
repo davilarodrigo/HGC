@@ -1,6 +1,4 @@
 <template>
-
-
     <div class="container mt-5">
 
         <h3>SQL Manager Demo</h3>

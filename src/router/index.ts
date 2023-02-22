@@ -8,8 +8,11 @@ import NotFoundErrorView from '../views/NotFoundErrorView.vue'
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
-
-
+        {
+            path: "/database-connections",
+            name: "database-connections",
+            component: () => import('../views/DatabaseManagerView.vue')
+        },
         {
             path: "/database",
             name: "database",
@@ -34,7 +37,6 @@ const router = createRouter({
             path: '/',
             name: 'home',
             component: DatabaseViewerScreen //temporarily database viewer 
-
         },
         {
             path: '/reports',

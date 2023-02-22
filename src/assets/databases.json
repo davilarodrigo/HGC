@@ -1,0 +1,30 @@
+[
+    {
+        "databaseName": "HGC Database local host",
+        "baseUrl": "https://localhost:44309/api/",
+        "sqlSelectUrl":"sqlSelect/post/",
+        "sentencesUrl":"sentences/",
+        "contextTableName": "context"
+    },
+    {
+        "databaseName": "HGC Database dynamic ip",
+        "baseUrl": "https://192.168.100.120:44309/api/",
+        "sqlSelectUrl":"sqlSelect/post/",
+        "sentencesUrl":"sqlSelect/",
+        "contextTableName": "context"
+    },
+    {
+        "databaseName": "test base 1",
+        "baseUrl": "https://localhost:2/",
+        "sqlSelectUrl":"sqlSelect/post/",
+        "sentencesUrl":"sqlSelect/",
+        "contextTableName": "get/context"
+    },
+    {
+        "databaseName": "test base 2",
+        "baseUrl": "https://localhost:1/",
+        "sqlSelectUrl":"sqlSelect/post/",
+        "sentencesUrl":"sqlSelect/",
+        "contextTableName": "contextTable"
+    }
+]

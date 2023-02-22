@@ -1,16 +1,12 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
 import NavBar from './components/NavBar.vue'
-import TheWelcome from './components/TheWelcome.vue'
-import DatabaseSelector from './components/DatabaseSelector.vue'
+
 import {RouterView} from 'vue-router'
 
 </script>
 
 <template >
-  <main >
-    
-    
+  <main>       
     <NavBar  />
     <div class="container">
       <RouterView />

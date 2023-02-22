@@ -15,11 +15,12 @@ class NavbarItem {
 
 const items: NavbarItem[] = [
     { title: "View Database", name: "database", link: "database" },
+    { title: "Manage Database", name: "database connections", link: "database-connections" },
     { title: "Query Builder", name: "builder", link: "builder" },
-    { title: "Templates", name: "templates", link: "templates" },
     { title: "Approve Queries", name: "query manager", link: "query-manager" },
+    { title: "Templates", name: "templates", link: "templates" },
     { title: "Reports", name: "reports", link: "reports" },
-    { title: "About", name: "about", link: "about" },
+    //{ title: "About", name: "about", link: "about" },
 ]
 
 const navbarItems = ref(items)
