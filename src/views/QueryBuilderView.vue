@@ -2,71 +2,101 @@
 <script setup lang="ts">
 </script>
 <template>
+    <h1>SQL Query Builder</h1>
 
-        <div id="sentence-editor-div" class="container">
-            <div class="row">
-                <div class="col-lg-2 col-md-3 my-2">
-                    SQL Command <br>
-                    <select class="text-select form-select-sm" name="" id="sql-command-select">
-                        <option value="SELECT">Select</option>
-                        <option value="DELETE">Delete</option>
-                        <option value="UPDATE">Update</option>
-                        <option value="INSERT">Insert</option>
-                    </select>
-                </div>
-            </div>
+    <div class="box">
 
-            <div id="sentece-output-div" class="row ">
-                <h4>Sentence Output</h4>
-                <textarea name="" id="sentence-output-text-area" disabled="true" rows="5"></textarea>
+        <div class="row">
+            <div class="col-lg-2 col-md-3 my-2">
+                Table <br>
+                <select class="text-select form-select-sm">
+                    <option>Option 1</option>
+                    <option>Option 2</option>
+                </select>
             </div>
-
-            <div class="row mt-1">
-                <div class="col ">
-                    <button class="btn btn-success" id="create-template-button">Save as Template</button>
-                    <button class="btn btn-secondary" id="load-template-button">Load Template</button>
-                </div>
-                <div class="col ">
-                    <p class="text-end">
-                        <span> <input type="checkbox" name="" id=""> enable manual edition </span>
-                        <button id="post-query-button" class="btn btn-primary">Post Query</button>
-                    </p>
-                </div>
-            </div>
-            <div id="select-options-div" class="mt-4 row">
-                <h4>Select Options</h4>
-                <div class="col">
-                    Show Columns
-                    <table class="table" id="select-table"></table>
-                </div>
-            </div>
-            <div id="update-options-div" hidden class="mt-4 row">
-                <h4>Update Options</h4>
-                //what columns to update and what values to set
-            </div>
-            <div id="insert-options-div" hidden class="mt-4 row">
-                <h4>Insert Values</h4>
-                //what values to insert, and in which columns
-            </div>
-            <div id="conditions-div" class="mt-4 row">
-                <!-- only visible while on "update" or "delete" mode -->
-                <h4>Conditions</h4>
-                <div class="col">
-                    <p>
-                        <select class="text-select form-select-sm inline " name="" id="column-condition-select">
-                        </select>
-                        is
-                        <select class="form-select-sm text-select" name="" id="operator-condition-select">
-                        </select>
-                        <input class="condition-text" type="text" name="" id="value-condition-input" value="">
-                        <button class="btn-dark btn" id="add-condition-button">
-                            <i class="fa-solid fa-circle-plus"></i> Add Condition</button>
-                        <button class="btn-dark btn" id="clear-conditions-button">
-                            <i class="fa-solid fa-trash"></i> Clear Conditions</button>
-                    </p>
-                </div>
-                <h5> Current conditions: </h5>
-                <textarea name="" id="conditions-text-area" disabled="true" rows="5"></textarea>
+            <div class="col-lg-2 col-md-3 my-2">
+                SQL Command <br>
+                <select class="text-select form-select-sm" name="" id="sql-command-select">
+                    <option value="SELECT">Select</option>
+                    <option value="DELETE">Delete</option>
+                    <option value="UPDATE">Update</option>
+                    <option value="INSERT">Insert</option>
+                </select>
             </div>
         </div>
+    </div>
+
+
+    <div class="box">
+
+        <h4>Columns to Show</h4>
+        <div class="row">
+            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
+            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
+            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
+            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
+            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
+            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
+            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
+            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
+            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+
+    <div class="box">
+
+        <h4>Conditions</h4>
+
+        <select>
+            <option value="">Phone</option>
+            <option value="">Name</option>
+            <option value="">Long select option</option>
+        </select>
+        is
+        <select>
+            <option value="">equal to</option>
+            <option value="">greater than</option>
+        </select>
+
+        <input type="text" value="351 4774362">
+        <button><i class="fa-solid fa-circle-plus"></i> Add Condition</button>
+
+        <br><br>
+        <h4> Current conditions: </h4>
+        <div class="row"> <textarea disabled="true" rows="5"></textarea> </div>
+        <button> <i class="fa-solid fa-trash"></i> Clear all Conditions</button>
+
+    </div>
+
+    <div class="box">
+
+        <h4>Sentence Output</h4>
+
+        <div class="row"> <textarea disabled="true" rows="5"></textarea> </div>
+
+        <div class="row mt-1">
+            <div class="col">
+                <button>Save as Template</button>
+                <button>Load Template</button>
+            </div>
+            <div class="col text-end">
+                <input type="checkbox" name="" id=""> enable manual edition
+                <button>Post Query</button>
+            </div>
+        </div>
+    </div>
 </template>

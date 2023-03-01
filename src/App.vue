@@ -9,7 +9,6 @@ import { RouterView } from 'vue-router'
   <main>
     <NavBar />
     <div class="container">
-      <DatabaseManagerView></DatabaseManagerView>
       <RouterView />
     </div>
 

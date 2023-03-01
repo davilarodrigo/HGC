@@ -24,8 +24,8 @@ const router = createRouter({
             component: () => import('../views/QueryBuilderView.vue')
         },
         {
-            path: "/template",
-            name: "template",
+            path: "/templates",
+            name: "templates",
             component: () => import('../views/TemplateManagerView.vue')
         },
         {

@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { DatabaseConnectionManager } from "@/classes/DatabaseConnectionManager";
+import { $ref } from "vue/macros"
+
+const connectionManager = $ref<DatabaseConnectionManager>(DatabaseConnectionManager.databaseConnectionManager)
 
 class NavbarItem {
     title: string
@@ -23,8 +26,8 @@ const items: NavbarItem[] = [
     //{ title: "About", name: "about", link: "about" },
 ]
 
-const navbarItems = ref(items)
-const currentItem = ref(items[0].name)
+const navbarItems = $ref(items)
+const currentItem = $ref(items[0].name)
 
 </script>
 
@@ -38,32 +41,41 @@ const currentItem = ref(items[0].name)
 
                 <li v-for="item in navbarItems">
 
-                    <router-link class="nav-link active" :class="{'selected-item':item.name==currentItem}" v-on:click="currentItem=item.name"  :to="item.link">{{ item.title }}</router-link>
+                    <router-link class="nav-link active" :class="{ 'selected-item': item.name == currentItem }"
+                        v-on:click="currentItem = item.name" :to="item.link">{{ item.title }}</router-link>
                 </li>
             </div>
-                <form class="login-buttons">
-                    <button id="logout-button" class="btn btn-outline-danger">Sign Out</button>
-                </form>
-            
+            <form class="login-buttons">
+                <button id="logout-button" class="btn btn-outline-danger">Sign Out</button>
+            </form>
         </ul>
-
-
     </nav>
+    <div v-if="connectionManager.connectionStatus=='Connected'" class="connection-status container-fluid">
+        <div class="container text-end">
+            <!-- Connected to: 192.101.20.1 -->
+        </div>
+    </div>
 </template>
 
 <style scoped>
-
-ul{display: flex;
+.connection-status {
+    background-color: darkgray;
 }
+
+ul {
+    display: flex;
+margin-bottom: 0;
+}
+
 .left-side {
     display: flex;
 }
 
-.selected-item{
-  font-weight: 500;
+.selected-item {
+    font-weight: 500;
 }
 
-.login-buttons{
+.login-buttons {
     margin-left: auto;
     margin-right: 0;
 }
