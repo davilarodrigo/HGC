@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { DatabaseConnectionManager } from "@/classes/DatabaseConnectionManager";
+import { RouterLink } from "vue-router";
 import { $ref } from "vue/macros"
-
+ 
+ 
 const connectionManager = $ref<DatabaseConnectionManager>(DatabaseConnectionManager.databaseConnectionManager)
 
 class NavbarItem {
@@ -29,6 +31,7 @@ const items: NavbarItem[] = [
 const navbarItems = $ref(items)
 const currentItem = $ref(items[0].name)
 
+ 
 </script>
 
 <template>
@@ -38,10 +41,9 @@ const currentItem = $ref(items[0].name)
                 <router-link to="/">
                     <img class="navbar-logo" src="src\assets\navbar_logo.png" id="main-menu-link" alt="Logo">
                 </router-link>
-
                 <li v-for="item in navbarItems">
 
-                    <router-link class="nav-link active" :class="{ 'selected-item': item.name == currentItem }"
+                    <router-link class="nav-link active" :class="{ 'selected-item': item.link == $route.name }"
                         v-on:click="currentItem = item.name" :to="item.link">{{ item.title }}</router-link>
                 </li>
             </div>
@@ -50,7 +52,7 @@ const currentItem = $ref(items[0].name)
             </form>
         </ul>
     </nav>
-    <div v-if="connectionManager.connectionStatus=='Connected'" class="connection-status container-fluid">
+    <div v-if="connectionManager.connectionStatus == 'Connected'" class="connection-status container-fluid">
         <div class="container text-end">
             <!-- Connected to: 192.101.20.1 -->
         </div>
@@ -64,7 +66,7 @@ const currentItem = $ref(items[0].name)
 
 ul {
     display: flex;
-margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 .left-side {
@@ -99,5 +101,6 @@ nav {
     vertical-align: middle;
     font-size: 1.2rem;
     font-weight: 400;
+    padding: 1rem;
 }
 </style>
