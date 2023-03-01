@@ -24,7 +24,7 @@
             </div>
             <div class="col-3">
                 &nbsp; <br>
-                <button>Select a Query Template</button>  
+                <button> <i class="fas fa-window-restore">&nbsp;&nbsp;</i>Select a Template</button>  
             </div>
         </div>
     </div>

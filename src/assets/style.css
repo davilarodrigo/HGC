@@ -36,7 +36,11 @@ button[color=green] {
     background-color: rgb(58, 180, 105); 
 }
 
-*[color] {
+i.fa-star{
+    color: rgb(255, 194, 25);
+}
+
+button[color],select[color] {    
     color: white;
     border: none;
     padding: .55rem;
@@ -50,7 +54,10 @@ button:hover {
     filter: brightness(90%);
 }
 
-input[type=text],input[type=number] {
+input[type=text],
+input[type=email],
+input[type=number],
+input[type=tel] {
     padding: .5rem;
     border-radius: .5rem;
     margin: .2rem;
@@ -63,3 +70,12 @@ textarea {
     width: 100%;
     padding: .5rem;
 }
+
+.light-header{
+    font-weight: 300;
+}
+
+.no-width{
+    width: 0%;    
+}
+

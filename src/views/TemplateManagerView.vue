@@ -1,62 +1,107 @@
 <script setup lang="ts">
-console.log("ReportsScreen loaded")
+import OperatorDropdown from '../components/OperatorDropdown.vue'
 </script>
 
 <template>
-    <div id="template-loader-div">
+    <h1>Templates</h1>
+    <div class="box">
+        <h4>Filter templates</h4>
         <div class="row">
-            <h3>Load Template </h3>
-        </div>
-        <div class="row">
-            <div class="col my-3">
-                <b> Template Name: </b>
-                <span id="template-name-label"> </span>
+            <div class="col-2">
+                Table <br>
+                <select long>
+                    <option>Option 1</option>
+                    <option>Option 2</option>
+                </select>
+            </div>
+            <div class="col-2">
+                SQL Command <br>
+                <select long>
+                    <option value="SELECT">Select</option>
+                    <option value="DELETE">Delete</option>
+                    <option value="UPDATE">Update</option>
+                    <option value="INSERT">Insert</option>
+                </select>
+            </div>
+            <div class="col-3">
+                Template Category <br>
+                <select>
+                    <option value="SELECT">All Categories</option>
+                    <option value="DELETE">Bookmarks</option>
+                </select>
+            </div>
+            <div class="col-3">
+                Name <br>
+                <input type="text" placeholder="Name of template">
             </div>
         </div>
-        <div class="row">
-            <table class=" table " id="template-loader-table">
-
-            </table>
-            <div class="col">
-                <button id="generate-sentence-button" class="btn btn-success">Generate Sentence</button>
-            </div>
-        </div>
-
     </div>
-    <div id="template-creation-div">
-        <div class="row">
-            <h3>Configure the Template</h3>
-        </div>
-
-        <div class="row">
-            <div class="col my-3">
-                Template Name: <input id="template-name-input" type="text">
-            </div>
-        </div>
-
-        <table class="align-middle table table-striped" id="template-creation-table">
+    <div class="box">
+        <h4>Available Templates</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="col-2">Name</th>
+                    <th class="col-2">Command</th>
+                    <th class="col-4">Preview</th>
+                    <th class="col-2">Date Created</th>
+                    <th class="no-width"></th>
+                </tr>
+            </thead>
             <tr>
-                <th> Column Name and Type </th>
-                <th> Condition Value and Operator </th>
-                <th> Template Options </th>
+                <td>Add Clients</td>
+                <td>INSERT</td>
+                <td>INSERT INTO Dbo.Clients Values (...)</td>
+                <td>2/23/2023</td>
+                <td> <i class="fa-solid fa-star"></i> </td>
+            </tr>
+            <tr>
+                <td>Add Providers</td>
+                <td>INSERT</td>
+                <td>INSERT INTO Dbo.Providers Values (...)</td>
+                <td>2/25/2023</td>
+                <td> <i class=" fa-regular fa-star"></i> </td>
+            </tr>
+            <tr>
+                <td>Delete Providers</td>
+                <td>DELETE</td>
+                <td>DELETE FROM Dbo.Providers Where ...</td>
+                <td>2/28/2023</td>
+                <td> <i class="fa-regular fa-star"></i> </td>
             </tr>
         </table>
-
-        <div class="col">
-            <button id="save-template-button" class="btn btn-primary"><i class="fa-solid fa-circle-plus"></i> Save
-                Template</button>
-            <button id="discard-template-button" class="btn btn-danger"> Discard Template</button>
-        </div>
+    </div>
+    <div class="box">
+        <h4>Preview Template: <span class="light-header">Delete Providers</span> </h4>
+        <br>
         <div class="row">
+            <div class="col-4">
+                <h5>Available Conditions</h5>
+
+                <input placeholder="Name" type="text" name="" id="">
+                <OperatorDropdown />
+                <input placeholder="Phone Number" type="tel" name="" id="">
+                <OperatorDropdown />
+                <input placeholder="Email" type="email" name="" id="">
+                <OperatorDropdown />
+                <button>Add New Condition</button>
+
+            </div>
+            <div class="col-8">
+                <h5> Output SQL Query </h5>
+                <textarea disabled
+                    rows="5">DELETE FROM Dbo.Providers Where name=[...] and phone=[...] and email = [...]</textarea>
+                <div class="text-end"> <button color="green">Post Query</button>
+                </div>
+            </div>
+
         </div>
     </div>
-    <div id="template-viewer-div" class="row">
-        <h3>Available Templates</h3>
-        <div class="col">
-            <p id="no-templates-message">No templates found for this table </p>
-            <table class="align-middle table" id="template-viewer-table">
-
-            </table>
-        </div>
+    <div class="box">
+        <h4>More Template Options</h4>
+        <button color="red">Delete Template</button>
+        <button>Duplicate</button>
+        <button>Edit</button>
+        <button>Change Permissions</button>
     </div>
 </template>

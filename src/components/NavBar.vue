@@ -19,7 +19,7 @@ class NavbarItem {
 }
 
 const items: NavbarItem[] = [
-    { title: "View Database", name: "database", link: "database-viewer" },
+    // { title: "View Database", name: "database", link: "database-viewer" },
     { title: "Manage Database", name: "database connections", link: "database-connections" },
     { title: "Query Builder", name: "builder", link: "query-builder" },
     { title: "Approve Queries", name: "query manager", link: "query-manager" },
