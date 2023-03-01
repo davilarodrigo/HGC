@@ -31,16 +31,16 @@ loadDatabaseList()
 </script>
 
 <template>
-  <h3>Manage Database Connections</h3>
+  <h1>Manage Database Connections</h1>
   <div class="row">
     <div class="my-2">
       Origin Database <br>
-      <select v-model="databaseSelectedOption" @change="databaseSelectChangeEvent()" class="text-select form-select-sm">
+      <select v-model="databaseSelectedOption" @change="databaseSelectChangeEvent()">
         <option disabled selected :value="undefined"> Select a Database </option>
         <option v-for="database in databasesList" v-bind:value="database"> {{ database.databaseName }} </option>
       </select>
       <br>
-      <span v-if="connectionManager.connectionStatus == 'Disconnected'">Select a database</span>
+      <span v-if="connectionManager.connectionStatus == 'Disconnected'"> &nbsp;</span>
       <span v-if="connectionManager.connectionStatus == 'Error'">Error connecting to database</span>
       <span v-if="connectionManager.connectionStatus == 'Connected'">Successfully connected to database</span>
       <span v-if="connectionManager.connectionStatus == 'Connecting'" class="loading-dots">Connecting to
@@ -51,8 +51,7 @@ loadDatabaseList()
   <div class="row">
     <div class="mt-2 mb-4">
       Table<br>
-      <select :disabled="tablesList.length == 0" v-model="tableSelectedOption"
-        class="text-select form-select-sm tables-select " name="" id="main-table-select">
+      <select :disabled="tablesList.length == 0" v-model="tableSelectedOption">
         <option disabled selected :value="undefined"> Select a Table</option>
         <option v-for="table in tablesList" :value="table"> {{ table.TableName }} </option>
       </select>

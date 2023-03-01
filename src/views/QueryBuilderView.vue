@@ -5,7 +5,6 @@
     <h1>SQL Query Builder</h1>
 
     <div class="box">
-
         <div class="row">
             <div class="col-lg-2 col-md-3 my-2">
                 Table <br>
@@ -61,7 +60,7 @@
 
         <br><br>
         <h4> Current conditions: </h4>
-        <div class="row"> <textarea disabled="true" rows="5"></textarea> </div>
+        <textarea disabled="true" rows="5"></textarea>
         <button color="red"> <i class="fa-solid fa-trash"></i> Clear all Conditions</button>
 
     </div>
@@ -70,12 +69,12 @@
 
         <h4>Sentence Output</h4>
 
-        <div class="row"> <textarea disabled="true" rows="5"></textarea> </div>
+        <textarea disabled="true" rows="5"></textarea>
 
         <div class="row mt-1">
             <div class="col">
-                <button >Save as Template</button>
-                <button  >Load Template</button>
+                <button>Save as Template</button>
+                <button>Load Template</button>
             </div>
             <div class="col text-end">
                 <input type="checkbox" name="" id=""> enable manual edition
