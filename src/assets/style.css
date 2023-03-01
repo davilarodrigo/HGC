@@ -1,33 +1,61 @@
-button{
+button {
     padding: .5rem;
     border-radius: .5rem;
     margin: .1rem;
-    border: none;
-    background-color: rgb(221, 96, 96);
-    color: white;
+    border: none;    
 }
 
-select{
-    padding: .4rem;
+select {
+    padding: .35rem;
     border-radius: .5rem;
-    border: none;
-    background-color: rgb(236, 207, 207);
+    background-color: rgb(255, 255, 255);    
+    border: 1px solid rgb(161, 161, 161);    ;
     margin: .2rem;
-    
 }
 
-button:hover{
+select[color=red] {
+    background-color: rgb(236, 207, 207);
+}
+
+button[color=red] {
+    background-color: rgb(221, 96, 96); 
+}
+
+button[color="light blue"] {
+    background-color: rgb(114, 153, 236);        
+}
+
+button[color="blue"] {
+    background-color: rgb(8, 80, 128);        
+}
+
+button[color=green] {
+    background-color: rgb(58, 180, 105); 
+}
+
+*[color] {
+    color: white;
+    border: none;
+}
+
+*[long] {
+    min-width: 10rem;
+}
+
+button:hover {
     filter: brightness(90%);
 }
 
-input[type=text]{
+input[type=text] {
     padding: .5rem;
     border-radius: .5rem;
     margin: .2rem;
-    border: 1px solid black;
+    border: 1px solid rgb(161, 161, 161);
+    
+    
 }
 
-textarea{
+textarea {
     margin: .5rem;
     border-radius: .5rem;
 }
