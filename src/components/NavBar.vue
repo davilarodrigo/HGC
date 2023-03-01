@@ -42,8 +42,7 @@ const currentItem = $ref(items[0].name)
                     <img class="navbar-logo" src="src\assets\navbar_logo.png" id="main-menu-link" alt="Logo">
                 </router-link>
                 <li v-for="item in navbarItems">
-
-                    <router-link class="nav-link active" :class="{ 'selected-item': item.link == $route.name }"
+                    <router-link class="nav-link active" :class="{ 'selected-item':'/' + item.link == $route.path }"
                         v-on:click="currentItem = item.name" :to="item.link">{{ item.title }}</router-link>
                 </li>
             </div>

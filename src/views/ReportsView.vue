@@ -3,47 +3,77 @@ console.log("ReportsScreen loaded")
 </script>
 
 <template>
-    <div id="report-filters" class="my-2">
-
-        <i class="fas fa-search"></i> Search Log <input>
-        Sort by <select class="text-select form-select-sm" name="" id="">
-            <option value="date">Date</option>
-            <option value="date">User</option>
-            <option value="date">Type of Log</option>
-        </select>
-        <br><br>
-
-        Filters:
-        Date <select class="text-select form-select-sm" name="" id="">
-            <option value="date">Any Date</option>
-            <option value="date">Today</option>
-            <option value="date">This Week</option>
-            <option value="date">This Month</option>
-        </select>
-        User <select class="text-select form-select-sm" name="" id="">
-            <option value="date">All Users</option>
-            <option value="date">Current User</option>
-        </select>
-        Type of log <select class="text-select form-select-sm" name="" id="">
-            <option value="date">All Logs</option>
-            <option value="date">Approved Queries</option>
-            <option value="date">Rejected Queries</option>
-            <option value="date">New Queries Created</option>
-            <option value="date">User logged in</option>
-            <option value="date">User logged out</option>
-        </select>
-
-        Logs to display <input value="15" type="number" max="200" min="1" maxlength="3" name="" id="logs-to-display-input">
-        <button class="btn"></button>
+    <h1>Reports</h1>
+    <div class="box">
+        <div class="row">
+            <div class="col-3">
+                <i class="fas fa-search"></i>
+                Search Log
+                <input type="text">
+            </div>
+            <div class="col-6">
+                <i class="fas fa-filter"></i>
+                Filter by
+                <br>
+                <select>
+                    <option>Any Date</option>
+                    <option>Today</option>
+                    <option>This Week</option>
+                    <option>This Month</option>
+                </select>
+                <select>
+                    <option>All Users</option>
+                    <option>Current User</option>
+                </select>
+                <select>
+                    <option>All Logs</option>
+                    <option>Approved Queries</option>
+                    <option>Rejected Queries</option>
+                    <option>New Queries Created</option>
+                    <option>User logged in</option>
+                    <option>User logged out</option>
+                </select>
+            </div>
+            <div class="col-3">
+                <i class="fas fa-sort"></i>
+                Sort by
+                <br>
+                <select>
+                    <option>Date</option>
+                    <option>User</option>
+                    <option>Type of Log</option>
+                </select>
+            </div>
+        </div>
     </div>
+
 
     <div class="jumbotron">
-        <h1 class="display-6">Last Logs:</h1>
+        <h2 class="display-6">Last Logs:</h2>
         <hr class="my-4">
 
-        <div id="reports-jumbotron"></div>
+        
+            <p><strong>2/28/2023, 11:46:04 PM: </strong>The user admin1 made a request to the URL
+                https://localhost:44309/api/sentences</p>
+            <p><strong>2/28/2023, 11:46:02 PM: </strong>The user admin1 made a request to the URL
+                https://localhost:44309/api/clients</p>
+            <p><strong>2/28/2023, 11:45:59 PM: </strong>The user admin1 made a request to the URL
+                https://localhost:44309/api/sentences</p>
+            <p><strong>2/28/2023, 11:44:20 PM: </strong>The user admin1 made a request to the URL
+                https://localhost:44309/api/clients</p>
+            <p><strong>2/28/2023, 11:44:19 PM: </strong>The user admin1 made a request to the URL
+                https://localhost:44309/api/sentences/</p>
+            <p><strong>2/28/2023, 10:16:04 PM: </strong>The admin admin1 created a new template</p>
+        <p><strong>2/28/2023, 08:10:05 PM: </strong>The user admin1 made a request to the URL
+            https://localhost:44309/api/clients</p>
+        <p><strong>2/28/2023, 08:10:03 PM: </strong>The user admin1 made a request to the URL ---</p>
+        <p><strong>2/28/2023, 08:08:54 PM: </strong>The user admin1 made a request to the URL
+            https://localhost:44309/api/clients</p> 
+ 
 
-    </div>
-    <div class="text-end">
-    </div>
-</template>
+</div>
+<div class="text-end">
+    Logs to display
+    <input value="15" type="number" max="200" min="1" maxlength="3">
+
+</div></template>

@@ -58,6 +58,7 @@ console.log("ReportsScreen loaded")
                 <strong> Creation Date: </strong>27/2/23 <br>
                 <strong> Type of Query: </strong>Insert <br>
                 <strong> Affected tables: </strong>clients, providers <br>
+                <strong> Status: </strong>Pending <br>
             </div>
             <div class="col-8">
                 <textarea disabled rows="8"> INSERT INTO Dbo.Clients VALUES('name1', 'lastname1', 'phone1') </textarea>
@@ -69,7 +70,7 @@ console.log("ReportsScreen loaded")
             <div class="box">
         -->
         <h4>Resolve Query</h4>
-        <textarea placeholder="Add comments here..." name="" id="" cols="30" rows="10"></textarea>
+        <textarea placeholder="Add comments here..." name="" id="" cols="30" rows="6"></textarea>
         <div class="row">
             <div class="col text-end">
 

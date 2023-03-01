@@ -6,14 +6,14 @@
 
     <div class="box">
         <div class="row">
-            <div class="col-lg-2 col-md-3 my-2">
+            <div class="col-2">
                 Table <br>
                 <select long>
                     <option>Option 1</option>
                     <option>Option 2</option>
                 </select>
             </div>
-            <div class="col-lg-2 col-md-3 my-2">
+            <div class="col-2">
                 SQL Command <br>
                 <select long>
                     <option value="SELECT">Select</option>
@@ -22,12 +22,20 @@
                     <option value="INSERT">Insert</option>
                 </select>
             </div>
+            <div class="col-3">
+                &nbsp; <br>
+                <button>Select a Query Template</button>  
+            </div>
         </div>
     </div>
 
     <div class="box">
         <h4>Columns to Show</h4>
         <div class="row">
+            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
+            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
+            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
+            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
             <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
             <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
             <div class="col-3"> <input type="checkbox"> Column Name<br> </div>

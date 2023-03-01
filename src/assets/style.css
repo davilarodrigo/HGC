@@ -3,8 +3,9 @@
 button {
     padding: .5rem;
     border-radius: .5rem;
-    margin: .1rem;
+    margin: .2rem;
     border: none;    
+    border: 1px solid rgb(161, 161, 161);    ;
 }
 
 select {
@@ -38,6 +39,7 @@ button[color=green] {
 *[color] {
     color: white;
     border: none;
+    padding: .55rem;
 }
 
 *[long] {
@@ -48,17 +50,16 @@ button:hover {
     filter: brightness(90%);
 }
 
-input[type=text] {
+input[type=text],input[type=number] {
     padding: .5rem;
     border-radius: .5rem;
     margin: .2rem;
-    border: 1px solid rgb(161, 161, 161);
-    
-    
+    border: 1px solid rgb(161, 161, 161);       
 }
 
 textarea {
     margin: .5rem;
     border-radius: .5rem;
     width: 100%;
+    padding: .5rem;
 }
