@@ -1,4 +1,4 @@
-export class DatabaseInformationObject {
+export class Database {
   databaseName: string
   baseUrl: string
   contextTableName: string
@@ -9,7 +9,7 @@ export class DatabaseInformationObject {
   //constructor(json)
   //constructor(databaseName: string, baseUrl: string, contextTableUrl: string, sqlSelectUrl: string, sentencesUrl: string //, contextTable: TableJson[]
 
-  constructor(database: DatabaseInformationObject
+  constructor(database: Database
   ) {
     this.databaseName = database.databaseName
     this.baseUrl = database.baseUrl

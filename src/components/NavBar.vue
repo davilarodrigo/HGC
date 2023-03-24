@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { DatabaseConnectionManager } from "@/classes/DatabaseConnectionManager";
-import { RouterLink } from "vue-router";
+import { ConnectionManager } from "@/classes/ConnectionManager" 
+import { RouterLink } from "vue-router"
 import { $ref } from "vue/macros"
  
  
-const connectionManager = $ref<DatabaseConnectionManager>(DatabaseConnectionManager.databaseConnectionManager)
+const connectionManager = $ref<ConnectionManager>(ConnectionManager.connectionManager)
 
 class NavbarItem {
     title: string
