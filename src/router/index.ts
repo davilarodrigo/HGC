@@ -1,5 +1,3 @@
-//Routing rules//
-
 import { createRouter, createWebHistory } from 'vue-router'
 import DatabaseViewerScreen from '../views/DatabaseViewerView.vue'
 import NotFoundErrorView from '../views/NotFoundErrorView.vue'

@@ -24,8 +24,11 @@ export class Connection {
         const data = await fetch(this.database.contextTableUrl)
     }
 
-    async getTables(): Promise<DatabaseTable[]> {
-        const url = this.database.contextTableUrl
-        return await (await fetch(url)).json()
+    async getTables(){ 
+        const url = this.database.contextTableUrl;
+        const response = await fetch(url);
+        const data = await response.text();
+        const tables = JSON.parse(data);
+        return tables;
     }
 }

@@ -6,21 +6,16 @@ import type { DatabaseTable } from "src/classes/DatabaseTable"
 import { ConnectionManager } from "@/classes/ConnectionManager"
 
 var databasesList = $ref<Database[]>([])
-var tablesList = $ref<DatabaseTable[] | undefined>([])
-var tableSelectedOption = $ref<DatabaseTable>()
 var databaseSelectedOption = $ref<Database | undefined>()
 const connectionManager = $ref<ConnectionManager>(ConnectionManager.connectionManager)
 
 async function databaseSelectChangeEvent() {
-  tablesList = []
-
   if (!databaseSelectedOption) {
     return
   }
 
   try {
     await connectionManager.connectToDatabase(databaseSelectedOption)
-    tablesList = await connectionManager.currentConnection?.getTables()
   } catch (error) {
     databaseSelectedOption = undefined
   }

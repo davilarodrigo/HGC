@@ -2,8 +2,7 @@
 import { ConnectionManager } from "@/classes/ConnectionManager" 
 import { RouterLink } from "vue-router"
 import { $ref } from "vue/macros"
- 
- 
+  
 const connectionManager = $ref<ConnectionManager>(ConnectionManager.connectionManager)
 
 class NavbarItem {
@@ -30,7 +29,6 @@ const items: NavbarItem[] = [
 
 const navbarItems = $ref(items)
 const currentItem = $ref(items[0].name)
-
  
 </script>
 
@@ -102,4 +100,5 @@ nav {
     font-weight: 400;
     padding: 1rem;
 }
+
 </style>

@@ -7,11 +7,15 @@ export class ConnectionManager {
 
     private databasesInfoUrl = "./src/assets/databases.json"
 
-    private constructor(){}
+    private constructor() { }
 
     private static singletonObject: ConnectionManager | undefined
 
-    static get connectionManager(): ConnectionManager { 
+    /**
+     * get the singleton connection manager object
+     * @returns connection manager singleton object
+     */
+    static get connectionManager(): ConnectionManager {
         if (!ConnectionManager.singletonObject) {
             ConnectionManager.singletonObject = new ConnectionManager()
         }

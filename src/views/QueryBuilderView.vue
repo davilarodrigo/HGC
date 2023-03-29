@@ -1,6 +1,25 @@
 
 <script setup lang="ts">
+import type { Connection } from '@/classes/Connection';
+import { ConnectionManager } from '@/classes/ConnectionManager';
+import type { DatabaseTable } from '@/classes/DatabaseTable';
+
+var connection: Connection | undefined
+
+var tables: DatabaseTable[] = []
+async function setupPage() {
+    connection = await ConnectionManager.connectionManager.currentConnection
+
+    if (connection) {
+        tables = await connection.getTables()
+        console.log(tables)
+    }
+}
+
+await setupPage()
+
 </script>
+
 <template>
     <h1>SQL Query Builder</h1>
 
@@ -9,8 +28,7 @@
             <div class="col-2">
                 Table <br>
                 <select long>
-                    <option>Option 1</option>
-                    <option>Option 2</option>
+                    <option v-for="tab in tables" value="">{{ tab.TableName }}</option>
                 </select>
             </div>
             <div class="col-2">
@@ -24,7 +42,7 @@
             </div>
             <div class="col-3">
                 &nbsp; <br>
-                <button> <i class="fas fa-window-restore">&nbsp;&nbsp;</i>Select a Template</button>  
+                <button> <i class="fas fa-window-restore">&nbsp;&nbsp;</i>Select a Template</button>
             </div>
         </div>
     </div>

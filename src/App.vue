@@ -9,7 +9,9 @@ import { RouterView } from 'vue-router'
   <main>
     <NavBar />
     <div class="container">
-      <RouterView />
+      <Suspense>        
+        <RouterView />
+      </Suspense>
     </div>
 
     <!-- <router-link to="/rep">Go to reports</router-link> -->
