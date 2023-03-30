@@ -13,9 +13,7 @@ var connection: Connection | undefined
 var selectedTable = $ref<SqlTable | undefined>()
 var selectedCommand = $ref<SqlCommandTypes>(SqlCommandTypes.Select)
 var selectedConditionColumn = $ref<SqlColumn|undefined>()
-
 var selectedColumns = $ref<SqlColumn[]>([])
-
 var outputSentence = $ref<string>("")
 
 var tables: SqlTable[] = []
@@ -109,13 +107,8 @@ await setupPage()
             <option v-for="col in selectedTable?.columns" v-bind:value="col">{{ col.name }}</option>
         </select>
                 
-        is
-        <select v-if="selectedConditionColumn?.type ==SqlDataTypes.String">
-            <option value="">Like</option>
-            <option value="">Not Like</option>
-        </select>
 
-        <OperatorDropdown v-if="selectedConditionColumn?.type==SqlDataTypes.Number"/>
+        <OperatorDropdown v-bind:column-type="selectedConditionColumn?.type" />
 
         <input type="text" value="">
         <button color="green"><i class="fa-solid fa-circle-plus"></i> Add Condition</button>
