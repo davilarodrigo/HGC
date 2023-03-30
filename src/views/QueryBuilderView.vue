@@ -1,6 +1,7 @@
 
 <script setup lang="ts">
 import OperatorDropdown from '../components/OperatorDropdown.vue'
+import ConditionBuilder from '../components/ConditionBuilder.vue'
 import type { Connection } from '@/classes/Connection';
 import { ConnectionManager } from '@/classes/ConnectionManager';
 import { SqlCommandTypes } from '@/classes/SqlCommandTypes';
@@ -12,7 +13,6 @@ import { SqlDataTypes } from '@/classes/SqlDataTypes';
 var connection: Connection | undefined
 var selectedTable = $ref<SqlTable | undefined>()
 var selectedCommand = $ref<SqlCommandTypes>(SqlCommandTypes.Select)
-var selectedConditionColumn = $ref<SqlColumn|undefined>()
 var selectedColumns = $ref<SqlColumn[]>([])
 var outputSentence = $ref<string>("")
 
@@ -27,7 +27,7 @@ async function setupPage() {
 
 async function tableSelectChangeEvent() {
     selectedColumns = []
-    selectedConditionColumn=undefined
+    //selectedConditionColumn=undefined
     setupOutputSentence()
 }
 
@@ -53,7 +53,7 @@ function setupOutputSentence() {
             outputSentence = `INSERT INTO ${selectedTable?.sqlName}`
             break;
     }
- 
+
 }
 
 await setupPage()
@@ -61,22 +61,21 @@ await setupPage()
 </script>
 
 <template>
-  
     <h1>SQL Query Builder</h1>
 
-    <div class="box">
-        <div class="row">
-            <div class="col-2">
-                Table <br>
-                <select v-model="selectedTable" @change="tableSelectChangeEvent()">
-                    <option disabled selected :value="undefined"> Select a Table </option>
-                    <option v-for="tab in tables" v-bind:value="tab">{{ tab.name }}</option>
-                </select>
-            </div>
-            <div class="col-2">
-                SQL Command <br>
-                <select v-model="selectedCommand" long>
-                    <option value="Select">SELECT</option>
+<div class="box">
+    <div class="row">
+        <div class="col-2">
+            Table <br>
+            <select v-model="selectedTable" @change="tableSelectChangeEvent()">
+                <option disabled selected :value="undefined"> Select a Table </option>
+                <option v-for="tab in tables" v-bind:value="tab">{{ tab.name }}</option>
+            </select>
+        </div>
+        <div class="col-2">
+            SQL Command <br>
+            <select v-model="selectedCommand" long>
+                <option value="Select">SELECT</option>
                     <option value="Delete">DELETE</option>
                     <option value="Update">UPDATE</option>
                     <option value="Insert">INSERT</option>
@@ -87,37 +86,6 @@ await setupPage()
                 <button> <i class="fas fa-window-restore">&nbsp;&nbsp;</i>Select a Template</button>
             </div>
         </div>
-    </div>
-
-    <div v-if="selectedTable && selectedCommand == SqlCommandTypes.Select" class="box">
-        <h4>Columns to Show</h4>
-        <div class="row">
-            <div v-for="col in selectedTable?.columns" class="col-3"> <input @change="setupOutputSentence()"
-                    v-model="selectedColumns" :value="col" type="checkbox"> {{ col.name }}<br>
-            </div>
-        </div>
-    </div>
-
-    <div v-if="selectedTable && selectedCommand != SqlCommandTypes.Insert" class="box">
-
-        <h4>Conditions</h4>
-
-        <select v-model="selectedConditionColumn" @change="setupOutputSentence()">
-            <option disabled selected :value="undefined"> Select a Column </option>
-            <option v-for="col in selectedTable?.columns" v-bind:value="col">{{ col.name }}</option>
-        </select>
-                
-
-        <OperatorDropdown v-bind:column-type="selectedConditionColumn?.type" />
-
-        <input type="text" value="">
-        <button color="green"><i class="fa-solid fa-circle-plus"></i> Add Condition</button>
-
-        <br><br>
-        <h4> Current conditions: </h4>
-        <textarea disabled="true" rows="5"></textarea>
-        <button color="red"> <i class="fa-solid fa-trash"></i> Clear all Conditions</button>
-
     </div>
 
     <div v-if="selectedTable" class="box">
@@ -137,5 +105,41 @@ await setupPage()
             </div>
         </div>
     </div>
+
+    <ConditionBuilder  :selected-command="selectedCommand"        :selected-table="selectedTable" />
+
+    <div v-if="selectedTable && selectedCommand == SqlCommandTypes.Select" class="box">
+        <h4>Columns to Show</h4>
+        <div class="row">
+            <div v-for="col in selectedTable?.columns" class="col-3"> <input @change="setupOutputSentence()"
+                    v-model="selectedColumns" :value="col" type="checkbox"> {{ col.name }}<br>
+            </div>
+        </div>
+    </div>
+
+    <!-- 
+
+                <div v-if="selectedTable && selectedCommand != SqlCommandTypes.Insert" class="box">
+            
+                <h4>Conditions</h4>
+        
+                <select v-model="selectedConditionColumn" @change="setupOutputSentence()">
+                    <option disabled selected :value="undefined"> Select a Column </option>
+                    <option v-for="col in selectedTable?.columns" v-bind:value="col">{{ col.name }}</option>
+                </select>
+        
+        
+                <OperatorDropdown v-bind:column-type="selectedConditionColumn?.type" />
+        
+                <input type="text" value="">
+                <button disabled color="green"><i class="fa-solid fa-circle-plus"></i> Add Condition</button>
+        
+                <br><br>
+                <h4> Current conditions: </h4>
+                <textarea disabled="true" rows="5"></textarea>
+                <button color="red"> <i class="fa-solid fa-trash"></i> Clear all Conditions</button>        
+            </div>
+        -->
+
 </template>
  

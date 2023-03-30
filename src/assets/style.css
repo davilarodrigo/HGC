@@ -40,6 +40,13 @@ i.fa-star{
     color: rgb(255, 194, 25);
 }
 
+/*
+*/
+button[disabled][color]{
+    background-color: rgb(214, 214, 214); 
+    color: rgb(170, 170, 170); 
+}
+
 button[color],select[color] {    
     color: white;
     border: none;
@@ -50,7 +57,7 @@ button[color],select[color] {
     min-width: 10rem;
 }
 
-button:hover {
+button:hover:not([disabled]) {
     filter: brightness(90%);
 }
 
