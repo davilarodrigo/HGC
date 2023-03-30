@@ -2,11 +2,18 @@
 <script setup lang="ts">
 import type { Connection } from '@/classes/Connection';
 import { ConnectionManager } from '@/classes/ConnectionManager';
+import { SqlCommandTypes } from '@/classes/SqlCommandTypes';
 import type { SqlTable } from '@/classes/SqlTable'
 import { $ref } from 'vue/macros';
+import type { SqlColumn } from '@/classes/SqlColumn';
 
 var connection: Connection | undefined
 var selectedTable = $ref<SqlTable | undefined>()
+var selectedCommand = $ref<SqlCommandTypes>(SqlCommandTypes.Select)
+
+var selectedColumns = $ref<SqlColumn[]>([])
+
+var outputSentence = $ref<string>("")
 
 var tables: SqlTable[] = []
 async function setupPage() {
@@ -15,11 +22,37 @@ async function setupPage() {
     if (connection) {
         tables = await connection.getTables()
     }
-    console.log(tables)
 }
 
-async function tableSelectChangeEvent(){
-    console.log(selectedTable)
+async function tableSelectChangeEvent() {
+    selectedColumns = []
+    setupOutputSentence()
+}
+
+function setupOutputSentence() {
+    switch (selectedCommand) {
+        case SqlCommandTypes.Select:
+
+            var columns
+            if (selectedColumns.length == 0) {
+                columns = "*"
+            } else {
+                columns = selectedColumns.map(c => c.ColumnName).join(", ")
+            }
+
+            outputSentence = `SELECT ${columns} FROM ${selectedTable?.name}`
+
+            break;
+        case SqlCommandTypes.Delete:
+            outputSentence = `DELETE FROM ${selectedTable?.name}`
+            break;
+        case SqlCommandTypes.Update:
+            outputSentence = `UPDATE ${selectedTable?.name}`
+            break;
+        case SqlCommandTypes.Insert:
+            outputSentence = `INSERT INTO ${selectedTable?.name}`
+            break;
+    }
 }
 
 await setupPage()
@@ -40,11 +73,11 @@ await setupPage()
             </div>
             <div class="col-2">
                 SQL Command <br>
-                <select long>
-                    <option value="SELECT">Select</option>
-                    <option value="DELETE">Delete</option>
-                    <option value="UPDATE">Update</option>
-                    <option value="INSERT">Insert</option>
+                <select v-model="selectedCommand" long>
+                    <option value="Select">SELECT</option>
+                    <option value="Delete">DELETE</option>
+                    <option value="Update">UPDATE</option>
+                    <option value="Insert">INSERT</option>
                 </select>
             </div>
             <div class="col-3">
@@ -54,15 +87,16 @@ await setupPage()
         </div>
     </div>
 
-    <div class="box">
+    <div v-if="selectedTable && selectedCommand == SqlCommandTypes.Select" class="box">
         <h4>Columns to Show</h4>
         <div class="row">
-            <div v-for="col in selectedTable?.columns" class="col-3"> <input type="checkbox"> {{ col.ColumnName }}<br>
+            <div v-for="col in selectedTable?.columns" class="col-3"> <input @change="setupOutputSentence()"
+                    v-model="selectedColumns" :value="col" type="checkbox"> {{ col.ColumnName }}<br>
             </div>
         </div>
     </div>
 
-    <div class="box">
+    <div v-if="selectedTable && selectedCommand != SqlCommandTypes.Insert" class="box">
 
         <h4>Conditions</h4>
 
@@ -87,11 +121,11 @@ await setupPage()
 
     </div>
 
-    <div class="box">
+    <div v-if="selectedTable" class="box">
 
         <h4>Sentence Output</h4>
 
-        <textarea disabled="true" rows="5"></textarea>
+        <textarea disabled="true" rows="5">{{ outputSentence }}</textarea>
 
         <div class="row mt-1">
             <div class="col">
@@ -105,3 +139,4 @@ await setupPage()
         </div>
     </div>
 </template>
+ 
