@@ -2,7 +2,7 @@
 
 import { $ref } from "vue/macros"
 import type { Database } from "@/classes/Database"
-import type { DatabaseTable } from "src/classes/DatabaseTable"
+import type { SqlTable } from "@/classes/SqlTable"
 import { ConnectionManager } from "@/classes/ConnectionManager"
 
 var databasesList = $ref<Database[]>([])

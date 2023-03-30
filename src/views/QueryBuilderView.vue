@@ -2,18 +2,24 @@
 <script setup lang="ts">
 import type { Connection } from '@/classes/Connection';
 import { ConnectionManager } from '@/classes/ConnectionManager';
-import type { DatabaseTable } from '@/classes/DatabaseTable';
+import type { SqlTable } from '@/classes/SqlTable'
+import { $ref } from 'vue/macros';
 
 var connection: Connection | undefined
+var selectedTable = $ref<SqlTable | undefined>()
 
-var tables: DatabaseTable[] = []
+var tables: SqlTable[] = []
 async function setupPage() {
     connection = await ConnectionManager.connectionManager.currentConnection
 
     if (connection) {
         tables = await connection.getTables()
-        console.log(tables)
     }
+    console.log(tables)
+}
+
+async function tableSelectChangeEvent(){
+    console.log(selectedTable)
 }
 
 await setupPage()
@@ -27,8 +33,9 @@ await setupPage()
         <div class="row">
             <div class="col-2">
                 Table <br>
-                <select long>
-                    <option v-for="tab in tables" value="">{{ tab.TableName }}</option>
+                <select v-model="selectedTable" @change="tableSelectChangeEvent()">
+                    <option disabled selected :value="undefined"> Select a Table </option>
+                    <option v-for="tab in tables" v-bind:value="tab">{{ tab.name }}</option>
                 </select>
             </div>
             <div class="col-2">
@@ -50,19 +57,8 @@ await setupPage()
     <div class="box">
         <h4>Columns to Show</h4>
         <div class="row">
-            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
-            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
-            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
-            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
-            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
-            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
-            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
-            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
-            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
-            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
-            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
-            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
-            <div class="col-3"> <input type="checkbox"> Column Name<br> </div>
+            <div v-for="col in selectedTable?.columns" class="col-3"> <input type="checkbox"> {{ col.ColumnName }}<br>
+            </div>
         </div>
     </div>
 
