@@ -1,9 +1,12 @@
-export class SqlColumn {
-  ColumnName: string
-  ColumnUrl: string
+import type { SqlDataTypes } from "./SqlDataTypes"
 
-  constructor(ColumnName: string, ColumnUrl: string) {
-    this.ColumnName = ColumnName
-    this.ColumnUrl = ColumnUrl
+export class SqlColumn {
+  name: string
+  type: SqlDataTypes
+
+  constructor(name: string, type: SqlDataTypes) {
+
+    this.name = name
+    this.type = type
   }
 }

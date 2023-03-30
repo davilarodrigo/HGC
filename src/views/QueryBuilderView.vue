@@ -1,15 +1,18 @@
 
 <script setup lang="ts">
+import OperatorDropdown from '../components/OperatorDropdown.vue'
 import type { Connection } from '@/classes/Connection';
 import { ConnectionManager } from '@/classes/ConnectionManager';
 import { SqlCommandTypes } from '@/classes/SqlCommandTypes';
 import type { SqlTable } from '@/classes/SqlTable'
 import { $ref } from 'vue/macros';
 import type { SqlColumn } from '@/classes/SqlColumn';
+import { SqlDataTypes } from '@/classes/SqlDataTypes';
 
 var connection: Connection | undefined
 var selectedTable = $ref<SqlTable | undefined>()
 var selectedCommand = $ref<SqlCommandTypes>(SqlCommandTypes.Select)
+var selectedConditionColumn = $ref<SqlColumn|undefined>()
 
 var selectedColumns = $ref<SqlColumn[]>([])
 
@@ -26,6 +29,7 @@ async function setupPage() {
 
 async function tableSelectChangeEvent() {
     selectedColumns = []
+    selectedConditionColumn=undefined
     setupOutputSentence()
 }
 
@@ -33,26 +37,25 @@ function setupOutputSentence() {
     switch (selectedCommand) {
         case SqlCommandTypes.Select:
 
-            var columns
-            if (selectedColumns.length == 0) {
-                columns = "*"
-            } else {
-                columns = selectedColumns.map(c => c.ColumnName).join(", ")
+            var columns = "*"
+            if (selectedColumns.length != 0) {
+                columns = selectedColumns.map(c => c.name).join(", ")
             }
 
-            outputSentence = `SELECT ${columns} FROM ${selectedTable?.name}`
+            outputSentence = `SELECT ${columns} FROM ${selectedTable?.sqlName}`
 
             break;
         case SqlCommandTypes.Delete:
-            outputSentence = `DELETE FROM ${selectedTable?.name}`
+            outputSentence = `DELETE FROM ${selectedTable?.sqlName}`
             break;
         case SqlCommandTypes.Update:
-            outputSentence = `UPDATE ${selectedTable?.name}`
+            outputSentence = `UPDATE ${selectedTable?.sqlName}`
             break;
         case SqlCommandTypes.Insert:
-            outputSentence = `INSERT INTO ${selectedTable?.name}`
+            outputSentence = `INSERT INTO ${selectedTable?.sqlName}`
             break;
     }
+ 
 }
 
 await setupPage()
@@ -60,6 +63,7 @@ await setupPage()
 </script>
 
 <template>
+  
     <h1>SQL Query Builder</h1>
 
     <div class="box">
@@ -91,7 +95,7 @@ await setupPage()
         <h4>Columns to Show</h4>
         <div class="row">
             <div v-for="col in selectedTable?.columns" class="col-3"> <input @change="setupOutputSentence()"
-                    v-model="selectedColumns" :value="col" type="checkbox"> {{ col.ColumnName }}<br>
+                    v-model="selectedColumns" :value="col" type="checkbox"> {{ col.name }}<br>
             </div>
         </div>
     </div>
@@ -100,18 +104,20 @@ await setupPage()
 
         <h4>Conditions</h4>
 
-        <select>
-            <option value="">Phone</option>
-            <option value="">Name</option>
-            <option value="">Long select option</option>
+        <select v-model="selectedConditionColumn" @change="setupOutputSentence()">
+            <option disabled selected :value="undefined"> Select a Column </option>
+            <option v-for="col in selectedTable?.columns" v-bind:value="col">{{ col.name }}</option>
         </select>
+                
         is
-        <select>
-            <option value="">equal to</option>
-            <option value="">greater than</option>
+        <select v-if="selectedConditionColumn?.type ==SqlDataTypes.String">
+            <option value="">Like</option>
+            <option value="">Not Like</option>
         </select>
 
-        <input type="text" value="351 4774362">
+        <OperatorDropdown v-if="selectedConditionColumn?.type==SqlDataTypes.Number"/>
+
+        <input type="text" value="">
         <button color="green"><i class="fa-solid fa-circle-plus"></i> Add Condition</button>
 
         <br><br>

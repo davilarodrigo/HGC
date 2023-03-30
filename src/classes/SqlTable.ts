@@ -1,5 +1,6 @@
 import type { Database } from "./Database"
 import { SqlColumn } from "./sqlColumn"
+import { SqlDataTypes } from "./SqlDataTypes"
 
 export class SqlTable {
   name: string
@@ -26,19 +27,31 @@ export class SqlTable {
     return Object.keys(data[0])
   }
 
+  private getColumnsTypes(data :Array<any>) {
+    var types: SqlDataTypes[] = []
+
+    const headers = this.getHeaders(data)
+
+    for (const i in headers) {
+      var type: SqlDataTypes = SqlDataTypes.String
+      if (typeof data[0][headers[i]] == "number") {
+        type = SqlDataTypes.Number
+      }
+      types.push(type)
+    }
+
+    return types
+  }
+
   private async getColumns() {
     const data = await (await fetch(this.url)).json()
     const headers = this.getHeaders(data)
-    //const types = getColumnsTypes(data)
+    const types =  this.getColumnsTypes(data)
 
     var columns: SqlColumn[] = []
 
     for (const i in headers) {
-      const column = new SqlColumn(headers[i], "type")
-      // var column: SqlColumn = {
-      //   name: headers[i],
-      //   ColumnType: types[i]
-      // }
+      const column = new SqlColumn(headers[i], types[i])
       columns.push(column)
     }
 
