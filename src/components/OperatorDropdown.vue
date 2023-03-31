@@ -1,26 +1,34 @@
 <script setup lang="ts">
 
-import { SqlDataTypes } from '@/classes/SqlDataTypes';
-import { SqlOperators } from '@/classes/SqlOperators';
-import type { PropType } from 'vue'
-import { defineProps, defineEmits } from 'vue';
-import { $ref } from 'vue/macros';
+import { SqlDataTypes } from '@/classes/SqlDataTypes'
+import { SqlOperators } from '@/classes/SqlOperators'
+import { watch, type PropType } from 'vue'
+import { defineProps, defineEmits } from 'vue'
+import { $ref } from 'vue/macros'
 
 const props = defineProps({
     columnType: String as PropType<SqlDataTypes>,
 })
 
-const emits = defineEmits(['operatorSelected']);
+const emits = defineEmits(['operatorSelected'])
 
-var selectedOperator = $ref < SqlOperators | undefined > (undefined);
+var selectedOperator = $ref<SqlOperators | undefined>(undefined)
 
 function emitOperatorSelected() {
-    emits('operatorSelected', selectedOperator);
+    emits('operatorSelected', selectedOperator)
 }
 
+function handleColumnTypeChange() {
+    selectedOperator = undefined;
+    if (props.columnType == SqlDataTypes.Number) {
+        selectedOperator = SqlOperators.equals
+        emitOperatorSelected()
+    }
+}
+
+watch(() => props.columnType, handleColumnTypeChange, { immediate: true })
+
 </script>
-
-
 
 <template>
     <select class="number-select" v-model="selectedOperator" @change="emitOperatorSelected"
@@ -41,11 +49,6 @@ function emitOperatorSelected() {
         <option :value="SqlOperators.like">Like</option>
         <option :value="SqlOperators.notLike">Not Like</option>
     </select>
-
-
-    <br>
-    child
-    {{ selectedOperator }}
 </template>
 
 <style scoped>
