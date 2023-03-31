@@ -41,14 +41,12 @@ watch(() => props.columnType, handleColumnTypeChange, { immediate: true })
         <option :value="SqlOperators.lessThan">&#60;</option>
     </select>
 
-    <span v-if="columnType == SqlDataTypes.String">is</span>
-
-    <select class="string-select" v-model="selectedOperator" @change="emitOperatorSelected"
-        v-if="columnType == SqlDataTypes.String">
-        <option disabled :value="undefined">-</option>
-        <option :value="SqlOperators.like">Like</option>
-        <option :value="SqlOperators.notLike">Not Like</option>
-    </select>
+    <span v-else>is <select class="string-select" v-model="selectedOperator" @change="emitOperatorSelected">
+            <option disabled :value="undefined">-</option>
+            <option :value="SqlOperators.like">Like</option>
+            <option :value="SqlOperators.notLike">Not Like</option>
+        </select>
+    </span>
 </template>
 
 <style scoped>

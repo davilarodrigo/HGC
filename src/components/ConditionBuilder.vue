@@ -81,7 +81,7 @@ function clearConditions() {
 
         <h4>Conditions</h4>
 
-        <select v-model="selectedColumn">
+        <select v-on:change="conditionValue=''" v-model="selectedColumn">
             <option disabled selected :value="undefined"> Select a Column </option>
             <option v-for="col in selectedTable?.columns" v-bind:value="col">{{ col.name }}</option>
         </select>
@@ -89,7 +89,7 @@ function clearConditions() {
         <OperatorDropdown @operatorSelected="updateSelectedOperator" :selected-operator="selectedOperator"
             v-bind:column-type="selectedColumn?.type" />
 
-        <input type="text" v-model="conditionValue">
+        <input :type="selectedColumn?.type=='Number'?'number':'text'" v-model="conditionValue">
         <button v-on:click="addCondition()" :disabled="!selectedColumn || !selectedOperator || !conditionValue"
             color="green"><i class="fa-solid fa-circle-plus"></i> Add Condition</button>
 
