@@ -23,7 +23,10 @@ export class SqlCondition {
     }
 
     static getConditionsAsSql(conditions: SqlCondition[]) {
-        var sql = "WHERE "
+        if (conditions.length == 0) {
+            return ""
+        }
+        var sql = " WHERE "
         sql += conditions.map(c => c.getSql()).join(" AND ")
 
         return sql

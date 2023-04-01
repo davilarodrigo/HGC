@@ -7,7 +7,7 @@ import { SqlCommandTypes } from '@/classes/SqlCommandTypes';
 import { SqlCondition } from '@/classes/SqlCondition';
 import type { SqlOperators } from '@/classes/SqlOperators';
 import type { SqlTable } from '@/classes/SqlTable';
-import type { PropType } from 'vue';
+import { watch, type PropType } from 'vue';
 import { $ref } from 'vue/macros';
 import OperatorDropdown from '../components/OperatorDropdown.vue'
 
@@ -23,15 +23,13 @@ var conditionValue = $ref<string>("")
 var conditionsString = $ref<string>("")
 var conditions = $ref<SqlCondition[]>([])
 
-const emits = defineEmits(['conditionsList', 'conditionsString']);
+const emits = defineEmits(['conditionsList']);
 
 const emitConditions = () => {
     emits('conditionsList', conditions)
 }
 
-const emitConditionsString = () => {
-    emits('conditionsString', conditionsString)
-}
+watch(() => conditions, emitConditions , {immediate:true})
 
 function addCondition() {
     console.log("Adding condition")
@@ -58,8 +56,7 @@ function addCondition() {
 
     conditionsString += selectedColumn.name + " " + selectedOperator + " " + conditionValue
     emitConditions()
-    emitConditionsString()
-
+ 
     selectedColumn = undefined
     selectedOperator = undefined
     conditionValue = ""

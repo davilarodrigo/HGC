@@ -2,20 +2,22 @@
 <script setup lang="ts">
 import OperatorDropdown from '../components/OperatorDropdown.vue'
 import ConditionBuilder from '../components/ConditionBuilder.vue'
-import type { Connection } from '@/classes/Connection';
-import { ConnectionManager } from '@/classes/ConnectionManager';
-import { SqlCommandTypes } from '@/classes/SqlCommandTypes';
+import type { Connection } from '@/classes/Connection'
+import { ConnectionManager } from '@/classes/ConnectionManager'
+import { SqlCommandTypes } from '@/classes/SqlCommandTypes'
 import type { SqlTable } from '@/classes/SqlTable'
-import { $ref } from 'vue/macros';
-import type { SqlColumn } from '@/classes/SqlColumn';
-import { SqlDataTypes } from '@/classes/SqlDataTypes';
-import { SqlCondition } from '@/classes/SqlCondition';
+import { $ref } from 'vue/macros'
+import type { SqlColumn } from '@/classes/SqlColumn'
+import { SqlDataTypes } from '@/classes/SqlDataTypes'
+import { SqlCondition } from '@/classes/SqlCondition'
+import { watch } from 'vue'
 
 var connection: Connection | undefined
 var selectedTable = $ref<SqlTable | undefined>()
 var selectedCommand = $ref<SqlCommandTypes>(SqlCommandTypes.Select)
 var selectedColumns = $ref<SqlColumn[]>([])
 var outputSentence = $ref<string>("")
+var currentConditions = $ref<SqlCondition[]>([])
 
 var tables: SqlTable[] = []
 async function setupPage() {
@@ -28,9 +30,12 @@ async function setupPage() {
 
 async function tableSelectChangeEvent() {
     selectedColumns = []
-    //selectedConditionColumn=undefined
     setupOutputSentence()
 }
+
+watch(() => selectedCommand, setupOutputSentence, { immediate: true })
+watch(() => selectedColumns, setupOutputSentence, { immediate: true })
+watch(() => currentConditions, setupOutputSentence, { immediate: true })
 
 function setupOutputSentence() {
     switch (selectedCommand) {
@@ -57,9 +62,7 @@ function setupOutputSentence() {
 }
 
 function updateConditions(conditions: SqlCondition[]) {
-    console.log("Conditions updated")
-    console.log(conditions)
-    console.log(SqlCondition.getConditionsAsSql(conditions))
+    currentConditions = conditions
 }
 
 await setupPage()
@@ -69,19 +72,19 @@ await setupPage()
 <template>
     <h1>SQL Query Builder</h1>
 
-<div class="box">
-    <div class="row">
-        <div class="col-2">
-            Table <br>
-            <select v-model="selectedTable" @change="tableSelectChangeEvent()">
-                <option disabled selected :value="undefined"> Select a Table </option>
-                <option v-for="tab in tables" v-bind:value="tab">{{ tab.name }}</option>
-            </select>
-        </div>
-        <div class="col-2">
-            SQL Command <br>
-            <select v-model="selectedCommand" long>
-                <option value="Select">SELECT</option>
+    <div class="box">
+        <div class="row">
+            <div class="col-2">
+                Table <br>
+                <select v-model="selectedTable" @change="tableSelectChangeEvent()">
+                    <option disabled selected :value="undefined"> Select a Table </option>
+                    <option v-for="tab in tables" v-bind:value="tab">{{ tab.name }}</option>
+                </select>
+            </div>
+            <div class="col-2">
+                SQL Command <br>
+                <select v-model="selectedCommand" long>
+                    <option value="Select">SELECT</option>
                     <option value="Delete">DELETE</option>
                     <option value="Update">UPDATE</option>
                     <option value="Insert">INSERT</option>
@@ -98,7 +101,8 @@ await setupPage()
 
         <h4>Sentence Output</h4>
 
-        <textarea disabled="true" rows="5">{{ outputSentence }}</textarea>
+        <textarea disabled="true"
+            rows="5">{{ outputSentence + SqlCondition.getConditionsAsSql(currentConditions) }}</textarea>
 
         <div class="row mt-1">
             <div class="col">
@@ -112,7 +116,8 @@ await setupPage()
         </div>
     </div>
 
-    <ConditionBuilder @conditions-list="updateConditions"  :selected-command="selectedCommand"        :selected-table="selectedTable" />
+    <ConditionBuilder @conditions-list="updateConditions" :selected-command="selectedCommand"
+        :selected-table="selectedTable" />
 
     <div v-if="selectedTable && selectedCommand == SqlCommandTypes.Select" class="box">
         <h4>Columns to Show</h4>
@@ -122,30 +127,5 @@ await setupPage()
             </div>
         </div>
     </div>
-
-    <!-- 
-
-                <div v-if="selectedTable && selectedCommand != SqlCommandTypes.Insert" class="box">
-            
-                <h4>Conditions</h4>
-        
-                <select v-model="selectedConditionColumn" @change="setupOutputSentence()">
-                    <option disabled selected :value="undefined"> Select a Column </option>
-                    <option v-for="col in selectedTable?.columns" v-bind:value="col">{{ col.name }}</option>
-                </select>
-        
-        
-                <OperatorDropdown v-bind:column-type="selectedConditionColumn?.type" />
-        
-                <input type="text" value="">
-                <button disabled color="green"><i class="fa-solid fa-circle-plus"></i> Add Condition</button>
-        
-                <br><br>
-                <h4> Current conditions: </h4>
-                <textarea disabled="true" rows="5"></textarea>
-                <button color="red"> <i class="fa-solid fa-trash"></i> Clear all Conditions</button>        
-            </div>
-        -->
-
 </template>
  
