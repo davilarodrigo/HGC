@@ -9,6 +9,7 @@ import type { SqlTable } from '@/classes/SqlTable'
 import { $ref } from 'vue/macros';
 import type { SqlColumn } from '@/classes/SqlColumn';
 import { SqlDataTypes } from '@/classes/SqlDataTypes';
+import { SqlCondition } from '@/classes/SqlCondition';
 
 var connection: Connection | undefined
 var selectedTable = $ref<SqlTable | undefined>()
@@ -53,7 +54,12 @@ function setupOutputSentence() {
             outputSentence = `INSERT INTO ${selectedTable?.sqlName}`
             break;
     }
+}
 
+function updateConditions(conditions: SqlCondition[]) {
+    console.log("Conditions updated")
+    console.log(conditions)
+    console.log(SqlCondition.getConditionsAsSql(conditions))
 }
 
 await setupPage()
@@ -106,7 +112,7 @@ await setupPage()
         </div>
     </div>
 
-    <ConditionBuilder  :selected-command="selectedCommand"        :selected-table="selectedTable" />
+    <ConditionBuilder @conditions-list="updateConditions"  :selected-command="selectedCommand"        :selected-table="selectedTable" />
 
     <div v-if="selectedTable && selectedCommand == SqlCommandTypes.Select" class="box">
         <h4>Columns to Show</h4>

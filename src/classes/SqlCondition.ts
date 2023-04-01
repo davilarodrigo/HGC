@@ -11,4 +11,21 @@ export class SqlCondition {
         this.operator = operator
         this.value = value
     }
+
+    getSql() {
+        var sql = ""
+        sql += this.column.name
+        sql += " "
+        sql += this.operator
+        sql += " "
+        sql += this.value        
+        return sql
+    }
+
+    static getConditionsAsSql(conditions: SqlCondition[]) {
+        var sql = "WHERE "
+        sql += conditions.map(c => c.getSql()).join(" AND ")
+
+        return sql
+    }
 }
