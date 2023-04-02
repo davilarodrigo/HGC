@@ -1,3 +1,4 @@
+import { NavigationFailureType } from "vue-router";
 import { ConnectionManager } from "./ConnectionManager";
 import type { Database } from "./Database";
 import type { SqlPostedQuery } from "./SqlPostedQuery";
@@ -45,6 +46,11 @@ export class Connection {
         const response = await fetch(url)
         const data = await response.text()
         var queries: SqlPostedQuery[] = JSON.parse(data)
+        //trim queries values
+        for (const query of queries) {
+            query.State= query.State.trim()
+            query.CodeSource= query.CodeSource.trim()
+        }
         return queries
     }
 
