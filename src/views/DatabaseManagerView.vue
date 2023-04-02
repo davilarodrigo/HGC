@@ -6,7 +6,7 @@ import type { SqlTable } from "@/classes/SqlTable"
 import { ConnectionManager } from "@/classes/ConnectionManager"
 
 var databasesList = $ref<Database[]>([])
-var databaseSelectedOption = $ref<Database | undefined>()
+var databaseSelectedOption = $ref<Database  >()
 const connectionManager = $ref<ConnectionManager>(ConnectionManager.connectionManager)
 
 async function databaseSelectChangeEvent() {
@@ -28,7 +28,7 @@ async function loadDatabaseList() {
 
 async function setupPage() {
   databaseSelectedOption = await connectionManager.currentConnection?.database
-
+   
   await loadDatabaseList()
 }
 
