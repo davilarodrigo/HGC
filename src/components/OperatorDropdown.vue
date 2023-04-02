@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
-import { SqlDataTypes } from '@/classes/SqlDataTypes'
-import { SqlOperators } from '@/classes/SqlOperators'
+import { SqlDataTypes } from '@/enums/SqlDataTypes'
+import { SqlOperators } from '@/enums/SqlOperators'
 import { watch, type PropType } from 'vue'
 import { defineProps, defineEmits } from 'vue'
 import { $ref } from 'vue/macros'

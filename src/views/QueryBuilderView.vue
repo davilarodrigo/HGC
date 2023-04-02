@@ -1,6 +1,5 @@
 
 <script setup lang="ts">
-import OperatorDropdown from '../components/OperatorDropdown.vue'
 import ConditionBuilder from '../components/ConditionBuilder.vue'
 import InsertCommandBuilder from '../components/InsertCommandBuilder.vue'
 import UpdateCommandBuilder from '../components/UpdateCommandBuilder.vue'
@@ -9,9 +8,8 @@ import type { SqlTable } from '@/classes/SqlTable'
 import type { SqlColumn } from '@/classes/SqlColumn'
 import type { Connection } from '@/classes/Connection'
 import { ConnectionManager } from '@/classes/ConnectionManager'
-import { SqlCommandTypes } from '@/classes/SqlCommandTypes'
+import { SqlCommandTypes } from '@/enums/SqlCommandTypes'
 import { $ref } from 'vue/macros'
-import { SqlDataTypes } from '@/classes/SqlDataTypes'
 import { SqlCondition } from '@/classes/SqlCondition'
 import { watch } from 'vue'
 

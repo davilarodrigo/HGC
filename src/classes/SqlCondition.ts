@@ -1,5 +1,5 @@
 import type { SqlColumn } from "./SqlColumn"
-import type { SqlOperators } from "./SqlOperators"
+import type { SqlOperators } from "../enums/SqlOperators"
 
 export class SqlCondition {
    column : SqlColumn

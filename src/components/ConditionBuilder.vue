@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { SqlColumn } from '@/classes/SqlColumn';
-import { SqlCommandTypes } from '@/classes/SqlCommandTypes';
-import { SqlCondition } from '@/classes/SqlCondition';
-import type { SqlOperators } from '@/classes/SqlOperators';
-import type { SqlTable } from '@/classes/SqlTable';
-import { watch, type PropType } from 'vue';
-import { $ref } from 'vue/macros';
+import type { SqlColumn } from '@/classes/SqlColumn'
+import { SqlCommandTypes } from '@/enums/SqlCommandTypes'
+import { SqlCondition } from '@/classes/SqlCondition'
+import type { SqlOperators } from '@/enums/SqlOperators'
+import type { SqlTable } from '@/classes/SqlTable'
+import { watch, type PropType } from 'vue'
+import { $ref } from 'vue/macros'
 import OperatorDropdown from '../components/OperatorDropdown.vue'
 
 const props = defineProps({
@@ -20,7 +20,7 @@ var conditionValue = $ref<string>("")
 var conditionsString = $ref<string>("")
 var conditions = $ref<SqlCondition[]>([])
 
-const emits = defineEmits(['conditionsList']);
+const emits = defineEmits(['conditionsList'])
 
 const emitConditions = () => {
     emits('conditionsList', conditions)
@@ -68,7 +68,7 @@ function addCondition() {
 }
 
 function updateSelectedOperator(operator: SqlOperators) {
-    selectedOperator = operator;
+    selectedOperator = operator
 }
 
 function clearConditions() {

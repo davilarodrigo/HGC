@@ -1,6 +1,7 @@
 import { ConnectionManager } from "./ConnectionManager";
 import type { Database } from "./Database";
-import  { SqlTable } from "./SqlTable";
+import type { SqlPostedQuery } from "./SqlPostedQuery";
+import { SqlTable } from "./SqlTable";
 import type { TableInterface } from "./TableInterface";
 
 export class Connection {
@@ -33,7 +34,41 @@ export class Connection {
         var tables: SqlTable[] = []
         tablesJson = JSON.parse(data)
         for (const tableJson of tablesJson) {
-            var table = await SqlTable.createTable(tableJson.TableName, tableJson.TableSqlName, tableJson.TableUrl, this.database)            
+            var table = await SqlTable.createTable(tableJson.TableName, tableJson.TableSqlName, tableJson.TableUrl, this.database)
+            tables.push(table)
+        }
+        return tables
+    }
+
+    async getQueries(): Promise<SqlPostedQuery[]> {
+        const url = this.database.queriesUrl
+        const response = await fetch(url)
+        const data = await response.text()
+        var queries: SqlPostedQuery[] = JSON.parse(data)
+        return queries
+    }
+
+    async getTableByName(tableName: string) {
+        throw Error("getTableByName: Not tested")
+        const tables = await this.getTables()
+        for (const table of tables) {
+            if (table.name == tableName) {
+                return table
+            }
+        }
+        throw Error("Table not found")
+    }
+
+    async getTable(table: SqlTable) {
+        throw Error("getTable: Not tested")
+        const url = table.url
+        const response = await fetch(url)
+        const data = await response.text()
+        var tablesJson: TableInterface[] = []
+        var tables: SqlTable[] = []
+        tablesJson = JSON.parse(data)
+        for (const tableJson of tablesJson) {
+            var table = await SqlTable.createTable(tableJson.TableName, tableJson.TableSqlName, tableJson.TableUrl, this.database)
             tables.push(table)
         }
         return tables

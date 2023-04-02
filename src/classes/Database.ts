@@ -1,9 +1,9 @@
 export class Database {
-  databaseName: string
-  baseUrl: string
-  contextTableName: string
-  sqlSelectUrl: string
-  sentencesUrl: string
+    databaseName: string
+   baseUrl: string
+  private contextTableName: string
+  private sqlSelectUrl: string
+  private sentencesUrl: string
   //contextTable?: TableJson[]
 
   //constructor(json)
@@ -21,6 +21,10 @@ export class Database {
 
   get contextTableUrl() {
     return this.baseUrl + this.contextTableName
+  }
+
+  get queriesUrl() {
+    return this.baseUrl + this.sentencesUrl
   }
 }
 

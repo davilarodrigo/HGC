@@ -1,4 +1,4 @@
-import type { SqlDataTypes } from "./SqlDataTypes"
+import type { SqlDataTypes } from "../enums/SqlDataTypes"
 
 export class SqlColumn {
   name: string

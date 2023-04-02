@@ -1,6 +1,6 @@
 import type { Database } from "./Database"
 import { SqlColumn } from "./SqlColumn"
-import { SqlDataTypes } from "./SqlDataTypes"
+import { SqlDataTypes } from "../enums/SqlDataTypes"
 
 export class SqlTable {
   name: string

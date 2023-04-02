@@ -25,7 +25,7 @@ export class ConnectionManager {
     async getDatabaseList(): Promise<Database[]> {
         var databasesJson: Database[] = await (await fetch(this.databasesInfoUrl)).json()
         var databases: Database[] = []
-
+        
         for (const database of databasesJson) {
             databases.push(new Database(database))
         }
