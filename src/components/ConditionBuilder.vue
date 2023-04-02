@@ -1,6 +1,3 @@
- 
-
-
 <script setup lang="ts">
 import type { SqlColumn } from '@/classes/sqlColumn';
 import { SqlCommandTypes } from '@/classes/SqlCommandTypes';
@@ -44,6 +41,10 @@ function addCondition() {
     if (!conditionValue) {
         console.log("No condition value")
         return
+    }
+
+    if (selectedColumn.type == "String") {
+        conditionValue = "'" + conditionValue + "'"
     }
 
     conditions.push(new SqlCondition(selectedColumn, selectedOperator, conditionValue))
@@ -98,4 +99,3 @@ function clearConditions() {
     </div>
 </template>
 
-<style scoped></style>

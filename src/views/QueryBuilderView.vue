@@ -2,12 +2,14 @@
 <script setup lang="ts">
 import OperatorDropdown from '../components/OperatorDropdown.vue'
 import ConditionBuilder from '../components/ConditionBuilder.vue'
+import InsertCommandBuilder from '../components/InsertCommandBuilder.vue'
+
+import type { SqlTable } from '@/classes/SqlTable'
+import type { SqlColumn } from '@/classes/SqlColumn'
 import type { Connection } from '@/classes/Connection'
 import { ConnectionManager } from '@/classes/ConnectionManager'
 import { SqlCommandTypes } from '@/classes/SqlCommandTypes'
-import type { SqlTable } from '@/classes/SqlTable'
 import { $ref } from 'vue/macros'
-import type { SqlColumn } from '@/classes/SqlColumn'
 import { SqlDataTypes } from '@/classes/SqlDataTypes'
 import { SqlCondition } from '@/classes/SqlCondition'
 import { watch } from 'vue'
@@ -18,6 +20,8 @@ var selectedCommand = $ref<SqlCommandTypes>(SqlCommandTypes.Select)
 var selectedColumns = $ref<SqlColumn[]>([])
 var outputSentence = $ref<string>("")
 var currentConditions = $ref<SqlCondition[]>([])
+var valuesToInsert = $ref<string | undefined>("")
+var textAreaDisabled = $ref<boolean>(false)
 
 var tables: SqlTable[] = []
 async function setupPage() {
@@ -57,19 +61,92 @@ function setupOutputSentence() {
             break;
         case SqlCommandTypes.Insert:
             outputSentence = `INSERT INTO ${selectedTable?.sqlName}`
+            outputSentence += valuesToInsert
             break;
+        default:
+            outputSentence = "Error: No command selected"
+            break;
+    }
+
+    if (selectedCommand != SqlCommandTypes.Insert) {
+        if (currentConditions.length) {
+            outputSentence += SqlCondition.getConditionsAsSql(currentConditions)
+        }
     }
 }
 
 function updateConditions(conditions: SqlCondition[]) {
     currentConditions = conditions
+    setupOutputSentence()
+}
+
+function updateValuesToInsert(values: string) {
+    valuesToInsert = values
+    setupOutputSentence()
 }
 
 await setupPage()
 
+function highlightStrings(sentence:string) {
+  const regex = /'(.*?)'/g; // Expresión regular para detectar cadenas entre comillas simples
+  return sentence.replace(regex, `<span class="sql-string">'$1'</span>`);
+}
+
+function highlightParenthesis(text: string): string {
+    const regex = /\('.*?'\)/g;
+    let match = regex.exec(text);
+    let result = '';
+    let lastIndex = 0;
+
+    while (match) {
+        const startIndex = match.index + 1;
+        const endIndex = startIndex + match[1].length;
+        result += text.slice(lastIndex, startIndex);
+        result += `<span class="sql-parenthesis">${match[1]}</span>`;
+        lastIndex = endIndex;
+        match = regex.exec(text);
+    }
+
+    result += text.slice(lastIndex);
+    return result;
+}
+
+function highlightPunctuation(text: string): string {
+    const punctuationRegex = /[(),;]/g;
+    return text.replace(punctuationRegex, (match) => {
+        return `<span class="sql-punctuation">${match}</span>`;
+    });
+}
+
+function highlightKeywords(sentence: string) {
+    const keywords = ["SELECT", "FROM", "WHERE", "INTO", "INSERT", "VALUES", "UPDATE", "DELETE", "LIKE", "NOT"];
+
+    const output = sentence
+        .split(" ")
+        .map((word) => {
+            const isKeyword = keywords.includes(word.toUpperCase());
+            if (isKeyword) {
+                return `<span class="keyword">${word}</span>`;
+            } else {
+                return word;
+            }
+        })
+        .join(" ")
+
+    return output
+}
+
+function highlightSql(sentence: string) {
+    sentence = highlightStrings(sentence)
+    sentence = highlightPunctuation(sentence)
+    sentence = highlightKeywords(sentence)
+    return sentence
+}
+
 </script>
 
 <template>
+    {{ valuesToInsert }}
     <h1>SQL Query Builder</h1>
 
     <div class="box">
@@ -101,8 +178,8 @@ await setupPage()
 
         <h4>Sentence Output</h4>
 
-        <textarea disabled="true"
-            rows="5">{{ outputSentence + SqlCondition.getConditionsAsSql(currentConditions) }}</textarea>
+        <div :contenteditable="textAreaDisabled" class="text-area-div"
+            v-html="highlightSql(outputSentence)"></div>
 
         <div class="row mt-1">
             <div class="col">
@@ -110,7 +187,7 @@ await setupPage()
                 <button>Load Template</button>
             </div>
             <div class="col text-end">
-                <input type="checkbox" name="" id=""> enable manual edition
+                <input v-model="textAreaDisabled" type="checkbox" name="" id=""> enable manual edition
                 <button color="green">Post Query</button>
             </div>
         </div>
@@ -118,6 +195,9 @@ await setupPage()
 
     <ConditionBuilder @conditions-list="updateConditions" :selected-command="selectedCommand"
         :selected-table="selectedTable" />
+
+    <InsertCommandBuilder @values-to-insert="updateValuesToInsert"
+        v-if="selectedTable && selectedCommand == SqlCommandTypes.Insert" :selected-table="selectedTable" />
 
     <div v-if="selectedTable && selectedCommand == SqlCommandTypes.Select" class="box">
         <h4>Columns to Show</h4>
@@ -129,3 +209,19 @@ await setupPage()
     </div>
 </template>
  
+<style  >
+.keyword {
+    font-weight: bold;
+    color: rgb(73, 73, 221);
+}
+
+.sql-punctuation {
+    font-weight: 500;
+    color: rgb(0, 0, 0);
+}
+
+.sql-string {
+    font-weight: 500;
+    color: rgb(185, 52, 52);
+}
+</style>

@@ -78,6 +78,22 @@ textarea {
     padding: .5rem;
 }
 
+.text-area-div {
+    color: black;
+    margin: .5rem;
+    border-radius: .5rem;
+    width: 100%;
+    padding: .5rem;
+    border: 1px solid rgb(161, 161, 161);       
+    height: 8rem;
+}
+
+.text-area-div[contenteditable=false]   {
+    background-color: hsl(0, 0%, 98%);
+    border-color:  hsl(0, 0%, 80%);
+    color: black;
+
+}
 .light-header{
     font-weight: 300;
 }
