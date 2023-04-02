@@ -120,7 +120,7 @@ function highlightPunctuation(text: string): string {
 }
 
 function highlightKeywords(sentence: string) {
-    const keywords = ["SELECT", "FROM", "WHERE", "INTO", "INSERT", "VALUES", "UPDATE", "DELETE", "LIKE", "NOT","AND"];
+    const keywords = ["SELECT", "FROM", "WHERE", "INTO", "INSERT", "VALUES", "UPDATE", "DELETE", "LIKE", "NOT","AND","SET"];
 
     const output = sentence
         .split(" ")

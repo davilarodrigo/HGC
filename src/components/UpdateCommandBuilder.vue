@@ -6,13 +6,12 @@ import { watch, type PropType } from 'vue';
 const props = defineProps({ selectedTable: { type: Object as PropType<SqlTable | undefined>, required: true }, })
 
 var valuesArray = $ref<string[]>([])
-var valuesMatrix = $ref<string[][]>([])
-var valuesToInsert = $ref("")
+var valuesToUpdate = $ref("")
 
-const emits = defineEmits(['valuesToInsert']);
-const emitValues = () => { emits('valuesToInsert', valuesToInsert) }
+const emits = defineEmits(['valuesToUpdate']);
+const emitValues = () => { emits('valuesToUpdate', valuesToUpdate) }
 
-watch(() => valuesToInsert, emitValues, { immediate: true })
+watch(() => valuesToUpdate, emitValues, { immediate: true })
 
 watch(() => props.selectedTable, () => {
 
@@ -23,50 +22,37 @@ watch(() => props.selectedTable, () => {
         valuesArray.push("")
     }
 
-    valuesToInsert = ""
+    valuesToUpdate = ""
 
 }, { immediate: true })
 
 function clearValues() {
-    valuesMatrix = []
-    valuesToInsert = ""
+    valuesToUpdate = ""
 
     for (let i = 0; i < valuesArray.length; i++) {
         valuesArray[i] = ""
     }
 }
 
-function addValues() {
-    if (valuesArray.includes("")) {
-        console.error("Empty values")
-        return
-    }
-
-    for (const val in valuesArray) {
-        if (props.selectedTable?.columns[val].type == "String") {
-            valuesArray[val] = "'" + valuesArray[val] + "'"
-        }
-    }
-
-    valuesMatrix.push(valuesArray)
-    valuesToInsert = " VALUES "
-    for (let i = 0; i < valuesMatrix.length; i++) {
-        valuesToInsert += "("
-        for (let j = 0; j < valuesMatrix[i].length; j++) {
-            valuesToInsert += valuesMatrix[i][j]
-            if (j != valuesMatrix[i].length - 1) {
-                valuesToInsert += ", "
-            }
-        }
-        valuesToInsert += ")"
-        if (i != valuesMatrix.length - 1) {
-            valuesToInsert += ", "
-        }
-    }
+function setValues() {
+    valuesToUpdate = " SET "
 
     for (let i = 0; i < valuesArray.length; i++) {
-        valuesArray[i] = ""
+
+        if (valuesArray[i] != "") {
+            if (props.selectedTable?.columns[i].type == "String") {
+                valuesToUpdate += `${props.selectedTable?.columns[i].name} = '${valuesArray[i]}', `
+            } else {
+                valuesToUpdate += `${props.selectedTable?.columns[i].name} = ${valuesArray[i]}, `
+            }
+        }
     }
+
+    valuesToUpdate = valuesToUpdate.slice(0, -2)
+}
+
+function addHtmlBreakLineAfterCommas(str: string) {
+    return str.replace(/,/g, ",<br>").replace(/SET/g, "SET<br>")
 }
 
 </script>
@@ -81,25 +67,22 @@ function addValues() {
                     <div class="row">
 
                         <label class="input-height-label col-4 text-end">{{ col.name }}</label>
-                        <input class="col-6" :type="col.type == 'Number' ? 'number' : 'text'"
-                            v-model="valuesArray[index]" />
+                        <input :placeholder="'New value for ' + col.name" class="col-6"
+                            :type="col.type == 'Number' ? 'number' : 'text'" v-model="valuesArray[index]"
+                            @change="setValues" />
                     </div>
-
                 </div>
 
-                <div class="row text-center mt-2">
+                <div class="row text-center mt-4">
 
                     <i>Please fill only the fields that need to be updated.</i>
                 </div>
             </div>
             <div class="col-7">
                 <h4> New Values: </h4>
-                <textarea disabled="true" rows="5">{{ valuesToInsert }}</textarea>
-                <button v-on:click="addValues()" :disabled="valuesArray.includes('')" color="green"><i
-                        class="fa-solid fa-circle-plus"></i> Add Value</button>
-                <button v-on:click="clearValues" v-show="valuesMatrix.length != 0" color="red"> <i
-                        class="fa-solid fa-trash"></i>
-                    Clear all Values</button>                
+                <div v-html="addHtmlBreakLineAfterCommas(valuesToUpdate)" class="text-area-div" rows="5"></div>
+                <button v-on:click="clearValues" v-show="valuesToUpdate" color="red"> <i class="fa-solid fa-trash"></i>
+                    Clear all Values</button>
             </div>
         </div>
         <div class="row text-center mt-4 mx-4">
