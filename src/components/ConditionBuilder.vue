@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SqlColumn } from '@/classes/sqlColumn';
+import type { SqlColumn } from '@/classes/SqlColumn';
 import { SqlCommandTypes } from '@/classes/SqlCommandTypes';
 import { SqlCondition } from '@/classes/SqlCondition';
 import type { SqlOperators } from '@/classes/SqlOperators';
@@ -27,6 +27,10 @@ const emitConditions = () => {
 }
 
 watch(() => conditions, emitConditions , {immediate:true})
+watch(() => props.selectedTable, () => {
+    conditions = []
+    conditionsString = ""
+}, { immediate: true })
 
 function addCondition() {
     console.log("Adding condition")

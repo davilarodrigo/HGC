@@ -2,20 +2,25 @@
 import NavBar from './components/NavBar.vue'
 import DatabaseManagerView from './views/DatabaseManagerView.vue'
 import { RouterView } from 'vue-router'
+import { SessionManager } from './classes/SessionManager';
+import { $ref } from 'vue/macros';
+import LoginViewVue from './views/LoginView.vue';
+
+var sessionManager = $ref(SessionManager.sessionManager)
 
 </script>
 
 <template >
   <main>
+
     <NavBar />
     <div class="container">
-      <Suspense>        
-        <RouterView />
+      <LoginViewVue v-if="!sessionManager.isSessionActive" />
+
+      <Suspense>
+        <RouterView v-if="sessionManager.isSessionActive" />
       </Suspense>
     </div>
-
-    <!-- <router-link to="/rep">Go to reports</router-link> -->
-    <!-- <HelloWorld msg="You did it!" /> -->
   </main>
 </template>
 

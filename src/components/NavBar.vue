@@ -2,7 +2,10 @@
 import { ConnectionManager } from "@/classes/ConnectionManager" 
 import { RouterLink } from "vue-router"
 import { $ref } from "vue/macros"
+import { SessionManager } from "@/classes/SessionManager";
   
+var sessionManager = $ref(SessionManager.sessionManager)
+
 const connectionManager = $ref<ConnectionManager>(ConnectionManager.connectionManager)
 
 class NavbarItem {
@@ -45,7 +48,7 @@ const currentItem = $ref(items[0].name)
                 </li>
             </div>
             <form class="login-buttons">
-                <button id="logout-button" class="btn btn-outline-danger">Sign Out</button>
+                <button @click="sessionManager.logout"  v-if="sessionManager.isSessionActive" class="btn btn-outline-danger">Sign Out</button>
             </form>
         </ul>
     </nav>

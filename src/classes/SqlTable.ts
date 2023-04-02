@@ -1,5 +1,5 @@
 import type { Database } from "./Database"
-import { SqlColumn } from "./sqlColumn"
+import { SqlColumn } from "./SqlColumn"
 import { SqlDataTypes } from "./SqlDataTypes"
 
 export class SqlTable {

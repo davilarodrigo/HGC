@@ -1,4 +1,4 @@
-import type { SqlColumn } from "./sqlColumn"
+import type { SqlColumn } from "./SqlColumn"
 import type { SqlOperators } from "./SqlOperators"
 
 export class SqlCondition {
