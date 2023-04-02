@@ -3,6 +3,7 @@
 import OperatorDropdown from '../components/OperatorDropdown.vue'
 import ConditionBuilder from '../components/ConditionBuilder.vue'
 import InsertCommandBuilder from '../components/InsertCommandBuilder.vue'
+import UpdateCommandBuilder from '../components/UpdateCommandBuilder.vue'
 
 import type { SqlTable } from '@/classes/SqlTable'
 import type { SqlColumn } from '@/classes/SqlColumn'
@@ -119,7 +120,7 @@ function highlightPunctuation(text: string): string {
 }
 
 function highlightKeywords(sentence: string) {
-    const keywords = ["SELECT", "FROM", "WHERE", "INTO", "INSERT", "VALUES", "UPDATE", "DELETE", "LIKE", "NOT"];
+    const keywords = ["SELECT", "FROM", "WHERE", "INTO", "INSERT", "VALUES", "UPDATE", "DELETE", "LIKE", "NOT","AND"];
 
     const output = sentence
         .split(" ")
@@ -192,12 +193,15 @@ function highlightSql(sentence: string) {
             </div>
         </div>
     </div>
-
+    
     <ConditionBuilder @conditions-list="updateConditions" :selected-command="selectedCommand"
+    :selected-table="selectedTable" />
+    
+    <UpdateCommandBuilder v-if="selectedTable && selectedCommand == SqlCommandTypes.Update"
         :selected-table="selectedTable" />
-
-    <InsertCommandBuilder @values-to-insert="updateValuesToInsert"
-        v-if="selectedTable && selectedCommand == SqlCommandTypes.Insert" :selected-table="selectedTable" />
+        
+        <InsertCommandBuilder @values-to-insert="updateValuesToInsert"
+            v-if="selectedTable && selectedCommand == SqlCommandTypes.Insert" :selected-table="selectedTable" />
 
     <div v-if="selectedTable && selectedCommand == SqlCommandTypes.Select" class="box">
         <h4>Columns to Show</h4>

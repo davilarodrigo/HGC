@@ -48,7 +48,7 @@ function addValues() {
         }
     }
 
-    valuesMatrix.push(valuesArray.slice())
+    valuesMatrix.push(valuesArray)
     valuesToInsert = " VALUES "
     for (let i = 0; i < valuesMatrix.length; i++) {
         valuesToInsert += "("
@@ -67,30 +67,42 @@ function addValues() {
     for (let i = 0; i < valuesArray.length; i++) {
         valuesArray[i] = ""
     }
-    console.log(valuesMatrix)
-    console.log(valuesToInsert)
 }
 
 </script>
 
 <template>
     <div class="box">
+        <div class="row">
+            <div class="col-5">
+                <h4>Values to Update</h4>
 
-        <h4>Values to Insert</h4>
+                <div v-for="(col, index) in selectedTable?.columns">
+                    <div class="row">
 
-        <input v-for="(col, index) in selectedTable?.columns" :placeholder="col.name"
-            :type="col.type == 'Number' ? 'number' : 'text'" v-model="valuesArray[index]" />
+                        <label class="input-height-label col-4 text-end">{{ col.name }}</label>
+                        <input class="col-6" :type="col.type == 'Number' ? 'number' : 'text'"
+                            v-model="valuesArray[index]" />
+                    </div>
 
-        <br>
+                </div>
 
-        <button v-on:click="addValues()" :disabled="valuesArray.includes('')" color="green"><i
-                class="fa-solid fa-circle-plus"></i> Add Value</button>
+                <div class="row text-center mt-2">
 
-        <button v-on:click="clearValues" v-show="valuesMatrix.length != 0" color="red"> <i class="fa-solid fa-trash"></i>
-            Clear all Values</button>
-
-        <br><br>
-        <h4> Current Values: </h4>
-        <textarea disabled="true" rows="5">{{ valuesToInsert }}</textarea>
+                    <i>Please fill only the fields that need to be updated.</i>
+                </div>
+            </div>
+            <div class="col-7">
+                <h4> New Values: </h4>
+                <textarea disabled="true" rows="5">{{ valuesToInsert }}</textarea>
+                <button v-on:click="addValues()" :disabled="valuesArray.includes('')" color="green"><i
+                        class="fa-solid fa-circle-plus"></i> Add Value</button>
+                <button v-on:click="clearValues" v-show="valuesMatrix.length != 0" color="red"> <i
+                        class="fa-solid fa-trash"></i>
+                    Clear all Values</button>                
+            </div>
+        </div>
+        <div class="row text-center mt-4 mx-4">
+        </div>
     </div>
 </template>

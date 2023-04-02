@@ -102,3 +102,8 @@ textarea {
     width: 0%;    
 }
 
+.input-height-label {
+    
+    line-height: 2.5rem;
+}
+
