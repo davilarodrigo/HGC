@@ -22,6 +22,7 @@ var selectedColumns = $ref<SqlColumn[]>([])
 var outputSentence = $ref<string>("")
 var currentConditions = $ref<SqlCondition[]>([])
 var valuesToInsert = $ref<string | undefined>("")
+var valuesToUpdate = $ref<string | undefined>("")
 var textAreaDisabled = $ref<boolean>(false)
 
 var tables: SqlTable[] = []
@@ -59,6 +60,7 @@ function setupOutputSentence() {
             break;
         case SqlCommandTypes.Update:
             outputSentence = `UPDATE ${selectedTable?.sqlName}`
+            outputSentence += valuesToUpdate
             break;
         case SqlCommandTypes.Insert:
             outputSentence = `INSERT INTO ${selectedTable?.sqlName}`
@@ -86,11 +88,16 @@ function updateValuesToInsert(values: string) {
     setupOutputSentence()
 }
 
+function updateValuesToUpdate(values: string) {
+    valuesToUpdate = values
+    setupOutputSentence()
+}
+
 await setupPage()
 
-function highlightStrings(sentence:string) {
-  const regex = /'(.*?)'/g; // Expresión regular para detectar cadenas entre comillas simples
-  return sentence.replace(regex, `<span class="sql-string">'$1'</span>`);
+function highlightStrings(sentence: string) {
+    const regex = /'(.*?)'/g; // Expresión regular para detectar cadenas entre comillas simples
+    return sentence.replace(regex, `<span class="sql-string">'$1'</span>`);
 }
 
 function highlightParenthesis(text: string): string {
@@ -120,7 +127,7 @@ function highlightPunctuation(text: string): string {
 }
 
 function highlightKeywords(sentence: string) {
-    const keywords = ["SELECT", "FROM", "WHERE", "INTO", "INSERT", "VALUES", "UPDATE", "DELETE", "LIKE", "NOT","AND","SET"];
+    const keywords = ["SELECT", "FROM", "WHERE", "INTO", "INSERT", "VALUES", "UPDATE", "DELETE", "LIKE", "NOT", "AND", "SET"];
 
     const output = sentence
         .split(" ")
@@ -137,7 +144,27 @@ function highlightKeywords(sentence: string) {
     return output
 }
 
+function insertBreakLines(sentence: string) {
+    const breakLinesAfter = ["FROM","WHERE","SET","VALUES",", ("]
+    
+    //add a <br> after each closing parenthesis and comma "),"
+    sentence = sentence.replace(/\),/g, "),<br>")
+
+    return sentence
+        .split(" ")
+        .map((word) => {
+            const isBreakLine = breakLinesAfter.includes(word.toUpperCase());
+            if (isBreakLine) {
+                return `<br> ${word}`;
+            } else {
+                return word;
+            }
+        })
+        .join(" ")
+}
+
 function highlightSql(sentence: string) {
+    sentence = insertBreakLines(sentence)
     sentence = highlightStrings(sentence)
     sentence = highlightPunctuation(sentence)
     sentence = highlightKeywords(sentence)
@@ -179,8 +206,7 @@ function highlightSql(sentence: string) {
 
         <h4>Sentence Output</h4>
 
-        <div :contenteditable="textAreaDisabled" class="text-area-div"
-            v-html="highlightSql(outputSentence)"></div>
+        <div :contenteditable="textAreaDisabled" class="text-area-div" v-html="highlightSql(outputSentence)"></div>
 
         <div class="row mt-1">
             <div class="col">
@@ -193,15 +219,15 @@ function highlightSql(sentence: string) {
             </div>
         </div>
     </div>
-    
+
     <ConditionBuilder @conditions-list="updateConditions" :selected-command="selectedCommand"
-    :selected-table="selectedTable" />
-    
-    <UpdateCommandBuilder v-if="selectedTable && selectedCommand == SqlCommandTypes.Update"
         :selected-table="selectedTable" />
-        
-        <InsertCommandBuilder @values-to-insert="updateValuesToInsert"
-            v-if="selectedTable && selectedCommand == SqlCommandTypes.Insert" :selected-table="selectedTable" />
+
+    <UpdateCommandBuilder @values-to-update="updateValuesToUpdate"
+        v-if="selectedTable && selectedCommand == SqlCommandTypes.Update" :selected-table="selectedTable" />
+
+    <InsertCommandBuilder @values-to-insert="updateValuesToInsert"
+        v-if="selectedTable && selectedCommand == SqlCommandTypes.Insert" :selected-table="selectedTable" />
 
     <div v-if="selectedTable && selectedCommand == SqlCommandTypes.Select" class="box">
         <h4>Columns to Show</h4>
