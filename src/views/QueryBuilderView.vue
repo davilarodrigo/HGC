@@ -174,7 +174,7 @@ function highlightSql(sentence: string) {
 </script>
 
 <template>
-    {{ valuesToInsert }}
+
     <h1>SQL Query Builder</h1>
 
     <div class="box">
