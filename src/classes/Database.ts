@@ -26,5 +26,10 @@ export class Database {
   get queriesUrl() {
     return this.baseUrl + this.sentencesUrl
   }
+
+  get queriesPutUrl() {
+    console.log("queriesPutUrl: " + this.baseUrl + this.sentencesUrl + "put")
+    return this.baseUrl + this.sentencesUrl + "put"
+  }
 }
 

@@ -54,6 +54,19 @@ export class Connection {
         return queries
     }
 
+    async updateQuery(query: SqlPostedQuery) {
+        const url = this.database.queriesPutUrl
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(query)
+        })
+        const data = await response.text()
+        console.log(data)
+    }
+    
     async getTableByName(tableName: string) {
         throw Error("getTableByName: Not tested")
         const tables = await this.getTables()
