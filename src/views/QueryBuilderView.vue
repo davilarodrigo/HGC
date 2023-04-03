@@ -162,19 +162,3 @@ await setupPage()
     </div>
 </template>
  
-<style  >
-.keyword {
-    font-weight: bold;
-    color: rgb(73, 73, 221);
-}
-
-.sql-punctuation {
-    font-weight: 500;
-    color: rgb(0, 0, 0);
-}
-
-.sql-string {
-    font-weight: 500;
-    color: rgb(185, 52, 52);
-}
-</style>

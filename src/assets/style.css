@@ -112,6 +112,22 @@ textarea {
     animation: shake .5s;   
 }
 
+/* highlighter */
+.keyword {
+    font-weight: bold;
+    color: rgb(73, 73, 221);
+}
+
+.sql-punctuation {
+    font-weight: 500;
+    color: rgb(0, 0, 0);
+}
+
+.sql-string {
+    font-weight: 500;
+    color: rgb(185, 52, 52);
+}
+
 @keyframes shake {
     10%, 90% {
     transform: translate3d(-1px, 0, 0);
