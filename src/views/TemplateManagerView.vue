@@ -3,13 +3,60 @@ import { QueryTemplate } from '@/classes/QueryTemplate';
 import OperatorDropdown from '../components/OperatorDropdown.vue'
 import { $ref } from 'vue/macros'
 import { SqlSyntaxHighlighter } from '@/classes/SqlSyntaxHighlighter';
+import { SessionManager } from '@/classes/SessionManager';
+import type { SqlPostedQuery } from '@/classes/SqlPostedQuery';
+import { SqlCommandTypes } from '@/enums/SqlCommandTypes';
+import { ConnectionManager } from '@/classes/ConnectionManager';
 
 var templates = $ref<QueryTemplate[]>([]);
 var selectedTemplate = $ref<QueryTemplate | undefined>();
+const connection = await ConnectionManager.connectionManager.currentConnection
 
 function setupPage() {
     templates = QueryTemplate.getTemplatesFromLocalStorage();
     console.log(templates);
+}
+
+async function postQuery() {
+
+    if (!SessionManager.sessionManager.currentSession) {
+        alert("You must be logged in to post a query")
+        return
+    }
+
+    if (!connection) {
+        alert("You must be connected to a database to post a query")
+        return
+    }
+
+    if (!selectedTemplate) {
+        alert("You must select a template to post a query")
+        return
+    }
+
+    //verify all variable values are filled
+    for (const variable of selectedTemplate.variables) {
+        if (!variable.value) {
+            alert("You must fill all variable values to post a query")
+            return
+        }
+    }
+
+    const query: SqlPostedQuery = {
+        Sentence: selectedTemplate?.commandType,
+        State: "Pending",
+        CodeSource: selectedTemplate?.completeSqlQuery,
+        DTAuthorization: "",
+        //get date with format 2022-11-25T22:00:36.31
+        DTcreation: new Date().toISOString().split('.')[0],
+        UsrCreator_: SessionManager.sessionManager.currentSession.username,
+        UsrAuthorizer: "",
+        CodeSentences: ""
+    }
+    await connection.postQuery(query)
+
+    alert("Query posted successfully")
+    selectedTemplate = undefined
 }
 
 setupPage()
@@ -100,7 +147,7 @@ setupPage()
                     class="text-area-div">
                 </div>
                 <br>
-                <div class="text-end"> <button color="green">Post Query</button> </div>
+                <div class="text-end"> <button @click="postQuery" color="green">Post Query</button> </div>
             </div>
         </div>
     </div>
@@ -109,7 +156,7 @@ setupPage()
             <i> Click on a template to use it </i>
         </div>
     </div>
- 
+
     <div v-if="selectedTemplate" class="box">
         <h4>More Template Options</h4>
         <button color="red">Delete Template</button>
