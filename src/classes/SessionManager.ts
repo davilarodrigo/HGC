@@ -1,6 +1,7 @@
 import { Database } from "./Database";
 import { Connection } from "./Connection";
 import { LocalStorageManager } from "./LocalStorageManager";
+import { ReportsManager } from "./ReportManager";
 
 enum Roles {
     admin = "admin",
@@ -11,13 +12,13 @@ enum Roles {
 
 class Session {
     username: string
-    role?: Roles
+    roles?: Roles[]
     token: Token
 
-    constructor(username: string, token: Token, role?: Roles) {
+    constructor(username: string, token: Token, roles?: Roles[]) {
         this.username = username
         this.token = token
-        this.role = role
+        this.roles = roles
     }
 }
 
@@ -44,8 +45,11 @@ class User {
 }*/
 
 export class SessionManager {
-    private constructor() { }
     private static singletonObject: SessionManager | undefined
+    private privateCurrentSession: Session | false = false
+
+    //singleton
+    private constructor() { }
     static get sessionManager(): SessionManager {
         if (!SessionManager.singletonObject) {
             SessionManager.singletonObject = new SessionManager()
@@ -53,74 +57,20 @@ export class SessionManager {
         return SessionManager.singletonObject
     }
 
-    private generateToken(shortSession = true): Token {
-        const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-        var expiration = new Date()
+    get currentSession(): Session | false {
+        this.validateSession()
+        //if there is no current session, see if there is one in local storage and validate it
 
-        if (shortSession) {
-            expiration.setSeconds(expiration.getSeconds() + 10)
-            expiration.setHours(expiration.getHours() - 3)
-        } else {
-            expiration.setHours(expiration.getHours() + 1)
-        }
-        
-        return new Token(token, expiration)
-    }
-
-    private sessionActive = false
-
-    get isSessionActive(): boolean {
-        if (!this.sessionActive) {
-            this.validateSession()
-        } else {
-            return true
-        }
-        return this.currentSession != undefined
-    }
-
-    currentSession?: Session
-
-    private validateSession() {
-        try {
-            const session = this.getSessionFromLocalStorage()
-            const token = session.token
-            const expiration = token.expiration
-            const now = new Date()
-                                    
-            if (now > expiration) {
-                this.removeSessionFromLocalStorage()
-                throw Error("Token expired")
-            }
-            this.currentSession = session
-            this.sessionActive = true                        
-            return
-        } catch (error) {
-            console.log("Could not validate session")
-        }
-        this.sessionActive = false
-        this.currentSession = undefined
-    }
-
-    private saveSessionInLocalStorage(session: Session) {
-        LocalStorageManager.saveInLocalStorage("session", session)
-    }
-
-    private getSessionFromLocalStorage() {
-        try {
-            const session = LocalStorageManager.getObjectFromLocalStorage("session")
-            return session as Session
-        } catch (error) {
-            throw Error("No session found in local storage")
-        }
-    }
-
-    private removeSessionFromLocalStorage() {
-        LocalStorageManager.removeItemFromLocalStorage("session")
+        return this.privateCurrentSession
     }
 
     logout() {
+        if (!this.privateCurrentSession) {
+            return
+        }
+        ReportsManager.logReport("User logged out: " + this.privateCurrentSession?.username)
         this.removeSessionFromLocalStorage()
-        this.currentSession = undefined
+        this.privateCurrentSession = false
     }
 
     login(username: string, password: string): boolean {
@@ -129,9 +79,10 @@ export class SessionManager {
         if (users) {
             for (const user of users) {
                 if (user.username == username && user.password == password) {
-                    const session = new Session(username, this.generateToken())
-                    this.saveSessionInLocalStorage(session)
-                    this.sessionActive = true
+                    this.privateCurrentSession = new Session(username, this.generateToken())
+                    this.saveSessionInLocalStorage(this.privateCurrentSession)
+                    ReportsManager.logReport("User logged in: " + username)
+
                     return true
                 }
             }
@@ -142,6 +93,70 @@ export class SessionManager {
     getUsers() {
         return LocalStorageManager.getObjectFromLocalStorage("users")
     }
+
+    private generateToken(shortSession = false): Token {
+        const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+        var expiration = new Date()
+
+        if (shortSession) {
+            expiration.setSeconds(expiration.getSeconds() + 10)
+        } else {
+            expiration.setHours(expiration.getHours() + 1)
+        }
+
+        return new Token(token, expiration)
+    }
+
+    private validateSession() {
+        var session: Session
+
+        //try to get session from local storage
+        if (!this.privateCurrentSession) {
+            try {
+                session = this.getSessionFromLocalStorage()
+            } catch (error) {
+                //console.log("No session in local storage")
+                return
+            }
+        } else {
+            session = this.privateCurrentSession
+        }
+
+        //validate if session is expired
+        if (session.token.expiration < new Date()) {
+            alert("Session expired. Please log in again.")
+
+            this.removeSessionFromLocalStorage()
+            this.privateCurrentSession = false
+            return
+        } else {
+            this.privateCurrentSession = session
+        }
+    }
+
+    private saveSessionInLocalStorage(session: Session) {
+        //save each attribute of the session in local storage separately        
+        LocalStorageManager.saveInLocalStorage("userSession.activeSession", session)
+        LocalStorageManager.saveInLocalStorage("userSession.token", session.token)
+        LocalStorageManager.saveInLocalStorage("userSession.token.expiration", session.token.expiration)
+    }
+
+    private getSessionFromLocalStorage(): Session {
+        try {
+            const session = LocalStorageManager.getObjectFromLocalStorage("userSession.activeSession")
+            session.token = LocalStorageManager.getObjectFromLocalStorage("userSession.token")
+            session.token.expiration = new Date(JSON.parse(LocalStorageManager.getObjectFromLocalStorage("userSession.token.expiration",false)))
+
+            return session
+        } catch (error) {
+            throw Error("No session found in local storage" + error)
+        }
+    }
+
+    private removeSessionFromLocalStorage() {
+        LocalStorageManager.removeItemFromLocalStorage("userSession.activeSession")
+    }
+
     /*
     saveUser(user: User) {
         const users = this.getUsers()

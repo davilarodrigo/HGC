@@ -64,7 +64,20 @@ export class Connection {
             body: JSON.stringify(query)
         })
         const data = await response.text()
-        console.log(data)
+        //console.log(data)
+    }
+
+    async postQuery(query: SqlPostedQuery) {
+        const url = this.database.queriesPostUrl
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(query)
+        })
+        const data = await response.text()
+        //console.log(data)
     }
     
     async getTableByName(tableName: string) {

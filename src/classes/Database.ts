@@ -1,7 +1,7 @@
 export class Database {
     databaseName: string
    baseUrl: string
-  private contextTableName: string
+   contextTableName: string
   private sqlSelectUrl: string
   private sentencesUrl: string
   //contextTable?: TableJson[]
@@ -30,6 +30,10 @@ export class Database {
   get queriesPutUrl() {
     console.log("queriesPutUrl: " + this.baseUrl + this.sentencesUrl + "put")
     return this.baseUrl + this.sentencesUrl + "put"
+  }
+
+  get queriesPostUrl() {
+    return this.baseUrl + this.sentencesUrl + "post"
   }
 }
 

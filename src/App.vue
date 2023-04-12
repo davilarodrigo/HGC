@@ -15,10 +15,10 @@ var sessionManager = $ref(SessionManager.sessionManager)
 
     <NavBar />
     <div class="container">
-      <LoginViewVue v-if="!sessionManager.isSessionActive" />
+      <LoginViewVue v-if="!sessionManager.currentSession" />
 
       <Suspense>
-        <RouterView v-if="sessionManager.isSessionActive" />
+        <RouterView v-if="sessionManager.currentSession" />
       </Suspense>
     </div>
   </main>

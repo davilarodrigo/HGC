@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import DatabaseViewerScreen from '../views/DatabaseViewerView.vue'
+import DatabaseManagerView from '../views/DatabaseManagerView.vue'
 import NotFoundErrorView from '../views/NotFoundErrorView.vue'
 
 
@@ -34,7 +34,7 @@ const router = createRouter({
         {
             path: '/',
             name: 'home',
-            component: DatabaseViewerScreen //temporarily database viewer 
+            component: DatabaseManagerView //temporarily database viewer 
         },
         {
             path: '/reports',

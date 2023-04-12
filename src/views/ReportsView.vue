@@ -1,5 +1,19 @@
 <script setup lang="ts">
-console.log("ReportsScreen loaded")
+import { Report, ReportsManager } from '@/classes/ReportManager';
+import { $ref } from 'vue/macros';
+
+var reports = $ref<Report[]>([])
+
+function  setupPage(){
+    updateReports()
+}
+
+function updateReports(){
+    reports = ReportsManager.getReports()
+}
+
+setupPage()
+
 </script>
 
 <template>
@@ -52,6 +66,11 @@ console.log("ReportsScreen loaded")
         <h2 class="display-6">Last Logs:</h2>
         <hr class="my-4">
 
+        {{ reports }}
+
+        <p v-for="report in reports">
+            <strong> {{ report.date.toLocaleDateString() }} </strong> {{ report.message }}
+        </p>
         
             <p><strong>2/28/2023, 11:46:04 PM: </strong>The user admin1 made a request to the URL
                 https://localhost:44309/api/sentences</p>

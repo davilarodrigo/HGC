@@ -5,6 +5,7 @@ import type { SqlPostedQuery } from '@/classes/SqlPostedQuery';
 import { $ref } from 'vue/macros'
 import { SqlSyntaxHighlighter } from '@/classes/SqlSyntaxHighlighter';
 import { SessionManager } from '@/classes/SessionManager';
+import { ReportsManager } from '@/classes/ReportManager';
 
 var connection: Connection | undefined
 
@@ -26,19 +27,17 @@ async function refreshQueries() {
 
 async function approveQuery() {
     await updateQueryState("Approved")
+    ReportsManager.logReport("Sql Query created by "+selectedQuery?.UsrCreator_+" was approved by " + selectedQuery?.UsrAuthorizer)
 }
 
 async function rejectQuery() {
     await updateQueryState("Rejected")
+    ReportsManager.logReport("Sql Query created by "+selectedQuery?.UsrCreator_+" was rejected by " + selectedQuery?.UsrAuthorizer)
 }
 
 async function updateQueryState(state: string) {
 
     if (!selectedQuery) {
-        return
-    }
-
-    if (selectedQuery.State != "Pending") {
         return
     }
 
@@ -52,7 +51,7 @@ async function updateQueryState(state: string) {
 
     await connection?.updateQuery(selectedQuery)
 
-    await refreshQueries()
+    await refreshQueries()    
 
     selectedQuery = undefined
 }
@@ -113,7 +112,6 @@ async function setAllQueriesToPending() {
             <div class="col text-end">
                 <input v-model="showOnlyPending" type="checkbox"> Show only pending queries                
                 <button @click="refreshQueries"><i class="fas fa-refresh"></i> Refresh </button>
-                <button @click="setAllQueriesToPending"><i class="fas fa-refresh"></i> All Pending </button>
             </div>
         </div>
     </div>

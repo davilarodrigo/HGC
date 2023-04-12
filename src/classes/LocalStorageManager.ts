@@ -3,14 +3,14 @@ export class LocalStorageManager {
         localStorage.setItem(key, JSON.stringify(object))
     }
 
-    static getObjectFromLocalStorage(key: string, classType?: any) {
+    static getObjectFromLocalStorage(key: string, parse = true) {
         const localStorageElement = localStorage.getItem(key)
         if (!localStorageElement) {
             return null
         }
 
-        if (classType) {
-            return new classType(JSON.parse(localStorageElement))
+        if (!parse) {
+            return localStorageElement
         }
 
         return JSON.parse(localStorageElement)

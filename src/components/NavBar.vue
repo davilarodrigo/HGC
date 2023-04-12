@@ -8,25 +8,20 @@ var sessionManager = $ref(SessionManager.sessionManager)
 
 const connectionManager = $ref<ConnectionManager>(ConnectionManager.connectionManager)
 
-class NavbarItem {
+interface NavbarItem {
     title: string
     name: string
     link: string
-
-    constructor(title: string, name: string, link: string) {
-        this.title = title
-        this.name = name
-        this.link = link
-    }
+    visibleWhenDisconnected: boolean 
 }
 
 const items: NavbarItem[] = [
     // { title: "View Database", name: "database", link: "database-viewer" },
-    { title: "Manage Database", name: "database connections", link: "database-connections" },
-    { title: "Query Builder", name: "builder", link: "query-builder" },
-    { title: "Approve Queries", name: "query manager", link: "query-manager" },
-    { title: "Templates", name: "templates", link: "templates" },
-    { title: "Reports", name: "reports", link: "reports" },
+    { visibleWhenDisconnected:true, title: "Manage Database", name: "database connections", link: "database-connections" },
+    { visibleWhenDisconnected:false, title: "Query Builder", name: "builder", link: "query-builder" },
+    { visibleWhenDisconnected:false, title: "Approve Queries", name: "query manager", link: "query-manager" },
+    { visibleWhenDisconnected:false, title: "Templates", name: "templates", link: "templates" },
+    { visibleWhenDisconnected:true, title: "Reports", name: "reports", link: "reports" },
     //{ title: "About", name: "about", link: "about" },
 ]
 
@@ -44,11 +39,11 @@ const currentItem = $ref(items[0].name)
                 </router-link>
                 <li v-for="item in navbarItems">
                     <router-link class="nav-link active" :class="{ 'selected-item':'/' + item.link == $route.path }"
-                        v-on:click="currentItem = item.name" :to="item.link">{{ item.title }}</router-link>
+                       v-show="connectionManager.connectionStatus == 'Connected' || item.visibleWhenDisconnected"   v-on:click="currentItem = item.name" :to="item.link">{{ item.title }}</router-link>
                 </li>
             </div>
             <form class="login-buttons">
-                <button @click="sessionManager.logout"  v-if="sessionManager.isSessionActive" class="btn btn-outline-danger">Sign Out</button>
+                <button @click="sessionManager.logout"  v-if="sessionManager.currentSession" class="btn btn-outline-danger">Sign Out</button>
             </form>
         </ul>
     </nav>

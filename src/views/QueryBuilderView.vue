@@ -13,6 +13,8 @@ import { $ref } from 'vue/macros'
 import { SqlCondition } from '@/classes/SqlCondition'
 import { watch } from 'vue'
 import { SqlSyntaxHighlighter } from '@/classes/SqlSyntaxHighlighter'
+import type { SqlPostedQuery } from '@/classes/SqlPostedQuery'
+import { SessionManager } from '@/classes/SessionManager'
 
 var connection: Connection | undefined
 var selectedTable = $ref<SqlTable | undefined>()
@@ -92,12 +94,44 @@ function updateValuesToUpdate(values: string) {
     setupOutputSentence()
 }
 
+async function postQuery() {
+
+    console.log("posting query...")
+
+    if (!SessionManager.sessionManager.currentSession) {
+        alert("You must be logged in to post a query")
+        return
+    }
+
+    if (!connection) {
+        alert("You must be connected to a database to post a query")
+        return
+    }
+
+    const query: SqlPostedQuery = {
+        Sentence: outputSentence.split(" ")[0],//get first word of "outputSentence"
+        State: "Pending",
+        CodeSource: outputSentence,
+        DTAuthorization: "",
+        //get date with format 2022-11-25T22:00:36.31
+        DTcreation: new Date().toISOString().split('.')[0],
+        UsrCreator_: SessionManager.sessionManager.currentSession.username,
+        UsrAuthorizer: "",
+        CodeSentences: ""
+    }
+    await connection.postQuery(query)
+
+    alert("Query posted successfully")
+    selectedTable = undefined
+    selectedCommand = SqlCommandTypes.Insert
+    selectedCommand = SqlCommandTypes.Select
+}
+
 await setupPage()
 
 </script>
 
 <template>
-
     <h1>SQL Query Builder</h1>
 
     <div class="box">
@@ -129,7 +163,8 @@ await setupPage()
 
         <h4>Sentence Output</h4>
 
-        <div :contenteditable="textAreaDisabled" class="text-area-div" v-html="SqlSyntaxHighlighter.highlightCompleteSqlQuery(outputSentence)"></div>
+        <div :contenteditable="textAreaDisabled" class="text-area-div"
+            v-html="SqlSyntaxHighlighter.highlightCompleteSqlQuery(outputSentence)"></div>
 
         <div class="row mt-1">
             <div class="col">
@@ -138,7 +173,7 @@ await setupPage()
             </div>
             <div class="col text-end">
                 <input v-model="textAreaDisabled" type="checkbox" name="" id=""> enable manual edition
-                <button color="green">Post Query</button>
+                <button @click="postQuery" color="green">Post Query</button>
             </div>
         </div>
     </div>

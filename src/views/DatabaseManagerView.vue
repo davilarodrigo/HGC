@@ -6,7 +6,7 @@ import type { SqlTable } from "@/classes/SqlTable"
 import { ConnectionManager } from "@/classes/ConnectionManager"
 
 var databasesList = $ref<Database[]>([])
-var databaseSelectedOption = $ref<Database  >()
+var databaseSelectedOption = $ref<Database | undefined>()
 const connectionManager = $ref<ConnectionManager>(ConnectionManager.connectionManager)
 
 async function databaseSelectChangeEvent() {
@@ -27,13 +27,13 @@ async function loadDatabaseList() {
 }
 
 async function setupPage() {
-  databaseSelectedOption = await connectionManager.currentConnection?.database
-   
+  databaseSelectedOption = await connectionManager.currentConnection?.database as Database
+
   await loadDatabaseList()
 }
 
 function disconnect() {
-  databaseSelectedOption=undefined
+  databaseSelectedOption = undefined
   connectionManager.disconnect()
 }
 
@@ -65,19 +65,19 @@ setupPage()
       <div v-if="connectionManager.connectionStatus == 'Connected'" class="jumbotron col-8">
         <h5>Database info</h5>
         <strong>URL: </strong> {{ connectionManager.currentConnection?.database.baseUrl }} <br>
-        <strong>Context table name: </strong> {{ connectionManager.currentConnection?.database.contextTableName }} <br>
-        <strong>Database name: </strong> {{ connectionManager.currentConnection?.database.databaseName }} <br>
-      </div>
+      <strong>Context table name: </strong> {{ connectionManager.currentConnection?.database.contextTableName }} <br>
+      <strong>Database name: </strong> {{ connectionManager.currentConnection?.database.databaseName }} <br>
     </div>
-    <div v-if="connectionManager.connectionStatus == 'Connected'" class="tables">
+  </div>
+  <div v-if="connectionManager.connectionStatus == 'Connected'" class="tables">
     <br><br>
     <h5>Database Tables</h5>
     <table class="table table-striped">
-      <thead>
-        <tr>
-          <th class="col-1">Table Name</th>
-          <th class="col-1">Primary Key</th>
-          <th class="col-4">Columns</th>
+        <thead>
+          <tr>
+            <th class="col-1">Table Name</th>
+            <th class="col-1">Primary Key</th>
+            <th class="col-4">Columns</th>
             <th class="col-1">Number of Rows</th>
           </tr>
         </thead>
@@ -95,7 +95,7 @@ setupPage()
         </tr>
         <tr>
           <td>Providers</td>
-          <td>ID</td> 
+          <td>ID</td>
           <td>Name, Last name, Email</td>
           <td>5</td>
         </tr>
@@ -113,12 +113,12 @@ setupPage()
 
   <!-- table select -->
   <!-- <div class="row">
-                                <div class="mt-2 mb-4">
-                                  Table<br>
-                                  <select :disabled="tablesList.length == 0" v-model="tableSelectedOption">
-                                    <option disabled selected :value="undefined"> Select a Table</option>
-                                    <option v-for="table in tablesList" :value="table"> {{ table.TableName }} </option>
-                                  </select>
-                                </div>
-                              </div> -->
+                                      <div class="mt-2 mb-4">
+                                        Table<br>
+                                        <select :disabled="tablesList.length == 0" v-model="tableSelectedOption">
+                                          <option disabled selected :value="undefined"> Select a Table</option>
+                                          <option v-for="table in tablesList" :value="table"> {{ table.TableName }} </option>
+                                        </select>
+                                      </div>
+                                    </div> -->
 </template>
