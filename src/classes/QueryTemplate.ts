@@ -95,7 +95,7 @@ export class QueryTemplate {
         console.log("template " + template.name + " does not exist in local storage")
     }
 
-    static createAndSaveExampleTemplate() {
+    static createAndSaveExampleTemplates() {
         const template = new QueryTemplate("example template", "UPDATE dbo.Clients SET ")
 
         template.addVariable({
@@ -135,6 +135,44 @@ export class QueryTemplate {
         })
 
         QueryTemplate.saveTemplateInLocalStorage(template)
+
+        const template2 = new QueryTemplate("Delete client by ID", "DELETE FROM dbo.Clients WHERE ")
+        template2.addVariable({
+            typeOfValue: "number",
+            textBefore: "ClientId = ",
+            textAfter: "",
+            value: "",
+            name: "client id",
+            operator: "="
+        })
+
+        QueryTemplate.saveTemplateInLocalStorage(template2)
+
+        /*SELECT *
+FROM dbo.HGCSentences
+WHERE Sentence LIKE 'asd' AND CodeSentences = 1*/
+
+        const template3 = new QueryTemplate("Select by sentence and code", "SELECT * FROM dbo.HGCSentences WHERE ")
+
+        template3.addVariable({
+            typeOfValue: "string",
+            textBefore: "Sentence LIKE '",
+            textAfter: "' AND ",
+            value: "",
+            name: "sentence like",
+            operator: "LIKE"
+        })
+
+        template3.addVariable({
+            typeOfValue: "number",
+            textBefore: "CodeSentences = ",
+            textAfter: "",
+            value: "",
+            name: "code sentences",
+            operator: "="
+        })
+
+        QueryTemplate.saveTemplateInLocalStorage(template3)
     }
 
     toggleFavorite() {
