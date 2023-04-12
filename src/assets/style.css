@@ -56,6 +56,9 @@ button[color],select[color] {
 *[long] {
     min-width: 10rem;
 }
+input[long] {
+    min-width: 20rem;
+}
 
 button:hover:not([disabled]) {
     filter: brightness(90%);

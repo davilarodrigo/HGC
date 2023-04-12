@@ -1,5 +1,19 @@
 <script setup lang="ts">
+import { QueryTemplate } from '@/classes/QueryTemplate';
 import OperatorDropdown from '../components/OperatorDropdown.vue'
+import { $ref } from 'vue/macros'
+import { SqlSyntaxHighlighter } from '@/classes/SqlSyntaxHighlighter';
+
+var templates = $ref<QueryTemplate[]>([]);
+var selectedTemplate = $ref<QueryTemplate | undefined>();
+
+function setupPage() {
+    templates = QueryTemplate.getTemplatesFromLocalStorage();
+    console.log(templates);
+}
+
+setupPage()
+
 </script>
 
 <template>
@@ -37,67 +51,66 @@ import OperatorDropdown from '../components/OperatorDropdown.vue'
         </div>
     </div>
     <div class="box">
-        <h4>Available Templates</h4>
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th class="col-2">Name</th>
                     <th class="col-2">Command</th>
-                    <th class="col-4">Preview</th>
+                    <th class="col-5">Preview</th>
                     <th class="col-2">Date Created</th>
-                    <th class="no-width"></th>
+                    <th class="no-width"> </th>
                 </tr>
             </thead>
-            <tr>
-                <td>Add Clients</td>
-                <td>INSERT</td>
-                <td>INSERT INTO Dbo.Clients Values (...)</td>
-                <td>2/23/2023</td>
-                <td> <i class="fa-solid fa-star"></i> </td>
-            </tr>
-            <tr>
-                <td>Add Providers</td>
-                <td>INSERT</td>
-                <td>INSERT INTO Dbo.Providers Values (...)</td>
-                <td>2/25/2023</td>
-                <td> <i class=" fa-regular fa-star"></i> </td>
-            </tr>
-            <tr>
-                <td>Delete Providers</td>
-                <td>DELETE</td>
-                <td>DELETE FROM Dbo.Providers Where ...</td>
-                <td>2/28/2023</td>
-                <td> <i class="fa-regular fa-star"></i> </td>
-            </tr>
+            <tbody>
+
+                <tr @click="selectedTemplate = template" v-for="template in templates">
+                    <td> {{ template.name }}</td>
+                    <td> {{ template.commandType }} </td>
+                    <td> {{ template.completeSqlQuery.substring(0, 50) + "..." }} </td>
+                    <td>2/23/2023</td>
+                    <td> <span @click="template.toggleFavorite()">
+                            <i v-if="template.isFavorite" class="fa-solid fa-star"></i>
+                            <i v-else class="fa-regular fa-star"></i>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </div>
-    <div class="box">
-        <h4>Preview Template: <span class="light-header">Delete Providers</span> </h4>
+
+    <div v-if="selectedTemplate" class="box">
+        <h4>Preview Template: <span class="light-header"> {{ selectedTemplate.name }} </span> </h4>
         <br>
         <div class="row">
             <div class="col-4">
-                <h5>Available Conditions</h5>
 
-                <input placeholder="Name" type="text" name="" id="">
-                <OperatorDropdown />
-                <input placeholder="Phone Number" type="tel" name="" id="">
-                <OperatorDropdown />
-                <input placeholder="Email" type="email" name="" id="">
-                <OperatorDropdown />
+                <h5>Available Variables for template</h5>
+                <div v-for="variable in selectedTemplate.variables">
+
+                    <input long :type="variable.typeOfValue == 'string' ? 'text' : 'number'" v-model="variable.value"
+                        :placeholder="variable.name">
+                </div>
+                <br>
                 <button>Add New Condition</button>
-
             </div>
             <div class="col-8">
                 <h5> Output SQL Query </h5>
-                <textarea disabled
-                    rows="5">DELETE FROM Dbo.Providers Where name=[...] and phone=[...] and email = [...]</textarea>
-                <div class="text-end"> <button color="green">Post Query</button>
+                <div style="min-height: 11rem;"
+                    v-html="SqlSyntaxHighlighter.highlightCompleteSqlQuery(selectedTemplate.completeSqlQuery)"
+                    class="text-area-div">
                 </div>
+                <br>
+                <div class="text-end"> <button color="green">Post Query</button> </div>
             </div>
-
         </div>
     </div>
-    <div class="box">
+    <div v-else>
+        <div class="col text-center">
+            <i> Click on a template to use it </i>
+        </div>
+    </div>
+ 
+    <div v-if="selectedTemplate" class="box">
         <h4>More Template Options</h4>
         <button color="red">Delete Template</button>
         <button>Duplicate</button>
